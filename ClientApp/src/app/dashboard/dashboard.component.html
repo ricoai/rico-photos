@@ -3,15 +3,15 @@
 <p>{{userId}}</p>
 
 
-<mat-card>
-  <mat-card-title>Upload File</mat-card-title>
+<div class="card">
+  <div class="card-title">Upload File</div>
 
-  <mat-card-content>
-    <mat-progress-bar [value]="progress"></mat-progress-bar>
+  <div class="card-body">
+    <ngb-progressbar type="info" [value]="progress" [striped]="true" [showValue]="true"></ngb-progressbar>
 
     <input type="file" (change)="onFileSelected($event)">
-    <mat-card-actions>
+    <div class="card-actions">
       <button type="button" (click)="onUpload()">UPLOAD</button>
-    </mat-card-actions>
-  </mat-card-content>
-</mat-card>
+    </div>
+  </div>
+</div>
