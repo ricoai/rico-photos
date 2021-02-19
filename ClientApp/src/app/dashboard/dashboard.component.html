@@ -1,0 +1,17 @@
+<p>dashboard works!</p>
+<p>Hello {{ userName | async }}</p>
+<p>{{userId}}</p>
+
+
+<mat-card>
+  <mat-card-title>Upload File</mat-card-title>
+
+  <mat-card-content>
+    <mat-progress-bar [value]="progress"></mat-progress-bar>
+
+    <input type="file" (change)="onFileSelected($event)">
+    <mat-card-actions>
+      <button type="button" (click)="onUpload()">UPLOAD</button>
+    </mat-card-actions>
+  </mat-card-content>
+</mat-card>
