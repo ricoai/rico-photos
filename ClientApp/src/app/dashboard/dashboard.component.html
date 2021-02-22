@@ -9,7 +9,7 @@
   <div class="card-body">
     <ngb-progressbar type="info" [value]="progress" [striped]="true" [showValue]="true"></ngb-progressbar>
 
-    <input type="file" (change)="onFileSelected($event)">
+    <input type="file" multiple (change)="onFileSelected($event)">
     <div class="card-actions">
       <button type="button" (click)="onUpload()">UPLOAD</button>
     </div>

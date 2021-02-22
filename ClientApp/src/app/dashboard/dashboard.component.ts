@@ -52,13 +52,16 @@ export class DashboardComponent implements OnInit {
   onUpload() {
     const fd = new FormData();
 
+    // Images loaded into the form data
     for (let file of this.selectedFiles) {
       fd.append(file.name, file);
     }
 
-    //fd.append('images', this.selectedFiles[0], this.selectedFiles[0].name)
-    fd.append('useId', this.userId);
+    // User ID to associate with the image
+    fd.append('userId', this.userId);
 
+    // POST the data to the server
+    // Monitor the progress with the upload
     this.http.post(this.baseUrl + 'api/image', fd, {
       reportProgress: true,
       observe: 'events'
