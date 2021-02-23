@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.Drawing.Imaging;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -43,10 +45,11 @@ namespace ricoai.Models
         /// <summary>
         /// Upload the file given by the stream to the S3 Bucket.  Use the UserID as the subdirectory folder in the S3 Bucket.
         /// </summary>
-        /// <param name="localFilePath">Stream for file.</param>
+        /// <param name="file">File from the HTTP post.</param>
         /// <param name="subdir">Subdirectory within the bucket.</param>
         /// <param name="fileName">File name to use for the uploaded file.  It is suggest to make the file name random.</param>
-        public async Task UploadToS3(IFormFile file, string subdir, string fileName)
+        /// <param name="thumbImageName">File name for the thumbnail.</param>
+        public async Task UploadImageAndThumbToS3(IFormFile file, string subdir, string fileName, string thumbImageName)
         {
             try
             {
@@ -54,33 +57,117 @@ namespace ricoai.Models
                 using (IAmazonS3 client = new AmazonS3Client(this._awsId, this._awsKey, Amazon.RegionEndpoint.USWest2))
                 {
                     TransferUtility utility = new TransferUtility(client);
-                    TransferUtilityUploadRequest request = new TransferUtilityUploadRequest();
 
                     // Create a new stream instead of OpenReadStream because the stream could be closed
-                    using (var newMemoryStream = new MemoryStream())
+                    using (var imageMemoryStream = new MemoryStream())
                     {
-                        file.CopyTo(newMemoryStream);
+                        using (var thumbMemoryStream = new MemoryStream())
+                        {
 
-                        // Create a folder with the user ID as the subdirectory
-                        request.BucketName = this._awsS3Bucket + @"/" + subdir;
+                            // Add the file to the memory stream
+                            await file.CopyToAsync(imageMemoryStream);
+                            await file.CopyToAsync(thumbMemoryStream);
 
-                        // Set the file name as the key
-                        request.Key = subdir + @"/" + fileName;
-                        request.InputStream = newMemoryStream;
-                        request.ContentType = file.ContentType;
-                        request.CannedACL = S3CannedACL.PublicRead;
+                            // Create a transfer request
+                            TransferUtilityUploadRequest request = new TransferUtilityUploadRequest();
 
-                        // Upload the file to S3
-                        await utility.UploadAsync(request);
+                            // Create a folder with the user ID as the subdirectory
+                            request.BucketName = this._awsS3Bucket + @"/" + subdir;
+
+                            // Set the file name as the key
+                            request.Key = AmazonUtils.GenS3InternalPath(subdir, fileName);
+                            request.InputStream = imageMemoryStream;
+                            request.ContentType = file.ContentType;
+                            request.CannedACL = S3CannedACL.PublicRead;
+
+                            // Upload the file to S3
+                            await utility.UploadAsync(request);
+
+                            // Upload the thumbnail to S3
+                            await UploadThumbToS3(thumbMemoryStream, subdir, thumbImageName);
+                        }
                     }
-                    string result = string.Format("http://{0}.s3.amazonaws.com/{1}", this._awsS3Bucket, request.Key);
-                    Console.Out.WriteLine(result);
+
+                    //imageMemoryStream.Dispose();
+                    //thumbMemoryStream.Dispose();
                 }
             }
             catch(Exception ex)
             {
                 Console.Out.WriteLine(ex);
             }
+        }
+
+        /// <summary>
+        /// Upload the Thumbnail to AWS S3.  This will generate a thumbnail for the image.
+        /// It will then generate a request and upload it to the S3.
+        /// </summary>
+        /// <param name="utility">Utility connected to S3.</param>
+        /// <param name="fileStream">Filestream of current image file.</param>
+        /// <param name="subdir">Subdirectory to store the image.</param>
+        /// <param name="thumbFileName">File name for the thumbnail.</param>
+        /// <returns></returns>
+        private async Task UploadThumbToS3(Stream memoryStream, string subdir, string thumbFileName)
+        {
+            // Create a connection to the S3 bucket
+            using (IAmazonS3 client = new AmazonS3Client(this._awsId, this._awsKey, Amazon.RegionEndpoint.USWest2))
+            {
+                TransferUtility utility = new TransferUtility(client);
+
+                using (Bitmap bitmap = new Bitmap(memoryStream))
+                {
+                    Image thumbImage = ImageUtils.resizeImage(bitmap);
+
+                    // Create a new stream instead of OpenReadStream because the stream could be closed
+                    using (var thumbMemoryStream = new MemoryStream())
+                    {
+                        // Add the file to the memory stream
+                        thumbImage.Save(thumbMemoryStream, ImageFormat.Jpeg);
+
+                        // Create a transfer request
+                        TransferUtilityUploadRequest request = new TransferUtilityUploadRequest();
+
+                        // Create a folder with the user ID as the subdirectory
+                        request.BucketName = this._awsS3Bucket + @"/" + subdir;
+
+                        // Set the file name as the key
+                        request.Key = AmazonUtils.GenS3InternalPath(subdir, thumbFileName);
+                        request.InputStream = thumbMemoryStream;
+                        request.CannedACL = S3CannedACL.PublicRead;
+
+                        // Upload the file to S3
+                        await utility.UploadAsync(request);
+                    }
+
+                }
+            }
+        }
+
+
+        public UserImage CreateUserImage(string userId, string origImageName, string randomImageName, string thumbImageName, string subDir, string fileType)
+        {
+            string s3Path = string.Format("http://{0}.s3.amazonaws.com/{1}", this._awsS3Bucket, GenS3InternalPath(subDir, randomImageName));
+            string s3ThumbPath = string.Format("http://{0}.s3.amazonaws.com/{1}", this._awsS3Bucket, GenS3InternalPath(subDir, thumbImageName));
+
+            Console.Out.WriteLine(s3Path);
+
+            // Pass the information to the database
+            UserImage dbImage = new UserImage();
+            dbImage.UserId = userId;
+            dbImage.ImageName = randomImageName;
+            dbImage.OrigImageName = origImageName;
+            dbImage.S3Path = s3Path;
+            dbImage.S3ThumbPath = s3ThumbPath;
+            dbImage.Create = DateTime.Now;
+            dbImage.Modified = DateTime.Now;
+            dbImage.FileType = fileType;
+
+            return dbImage;
+        }
+
+        public static string GenS3InternalPath(string subdir, string fileName)
+        {
+            return subdir + @"/" + fileName;
         }
     }
 }

@@ -50,6 +50,11 @@ namespace ricoai
             {
                 configuration.RootPath = "ClientApp/dist";
             });
+
+            // Create the DB Connection to the SQL Server on AWS
+            // Configuration stored in secrets.json
+            services.AddDbContext<RicoaiDbContext>(options =>
+                    options.UseSqlServer(Configuration["aws-db:connectionString"]));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

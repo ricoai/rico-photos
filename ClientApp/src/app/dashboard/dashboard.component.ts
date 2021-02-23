@@ -28,7 +28,7 @@ export class DashboardComponent implements OnInit {
     this.baseUrl = baseUrl;
   }
 
-
+  userImages: Object = null;
   selectedFiles: File[] = null;
 
   ngOnInit() {
@@ -39,7 +39,7 @@ export class DashboardComponent implements OnInit {
     this.authorizeService.getUserId().subscribe(val => this.userId = val);
     this.userProfile = this.authorizeService.getUserProfile();
 
-    this.http.get(this.baseUrl + 'api/image').subscribe(result => console.log(result));
+    this.http.get(this.baseUrl + 'api/UserImages').subscribe(result => { console.log(result); this.userImages = result; });
     this.progress = 0;
   }
 
@@ -62,7 +62,7 @@ export class DashboardComponent implements OnInit {
 
     // POST the data to the server
     // Monitor the progress with the upload
-    this.http.post(this.baseUrl + 'api/image', fd, {
+    this.http.post(this.baseUrl + 'api/UserImages', fd, {
       reportProgress: true,
       observe: 'events'
     }).subscribe(event => {
