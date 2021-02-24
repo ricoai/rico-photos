@@ -54,5 +54,25 @@ namespace ricoai.Models
         /// The file type, whether it is a jpg, png or gif.
         /// </summary>
         public string FileType { get; set; }
+
+        /// <summary>
+        /// Meta Data of the image.  JSON string.
+        /// </summary>
+        public string MetaData { get; set; }
+
+        /// <summary>
+        /// Tags to self label the image.
+        /// </summary>
+        public string[] Tags { get; set; }
+
+        /// <summary>
+        /// Album IDs.
+        /// </summary>
+        public int[] AlbumIds { get; set; }
+
+        /// <summary>
+        /// AI tags and labels.  JSON String.
+        /// </summary>
+        public string AiTags { get; set; }
     }
 }

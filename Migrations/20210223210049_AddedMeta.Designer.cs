@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ricoai.Data;
 
 namespace ricoai.Migrations
 {
     [DbContext(typeof(RicoaiDbContext))]
-    partial class RicoaiDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210223210049_AddedMeta")]
+    partial class AddedMeta
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

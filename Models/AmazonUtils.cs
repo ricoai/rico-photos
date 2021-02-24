@@ -75,7 +75,7 @@ namespace ricoai.Models
                             request.BucketName = this._awsS3Bucket + @"/" + subdir;
 
                             // Set the file name as the key
-                            request.Key = AmazonUtils.GenS3InternalPath(subdir, fileName);
+                            request.Key = fileName;
                             request.InputStream = imageMemoryStream;
                             request.ContentType = file.ContentType;
                             request.CannedACL = S3CannedACL.PublicRead;
@@ -116,7 +116,7 @@ namespace ricoai.Models
 
                 using (Bitmap bitmap = new Bitmap(memoryStream))
                 {
-                    Image thumbImage = ImageUtils.resizeImage(bitmap);
+                    Image thumbImage = ImageUtils.resizeImage(bitmap, padImage:false);
 
                     // Create a new stream instead of OpenReadStream because the stream could be closed
                     using (var thumbMemoryStream = new MemoryStream())
@@ -131,7 +131,7 @@ namespace ricoai.Models
                         request.BucketName = this._awsS3Bucket + @"/" + subdir;
 
                         // Set the file name as the key
-                        request.Key = AmazonUtils.GenS3InternalPath(subdir, thumbFileName);
+                        request.Key = thumbFileName;
                         request.InputStream = thumbMemoryStream;
                         request.CannedACL = S3CannedACL.PublicRead;
 
@@ -146,8 +146,8 @@ namespace ricoai.Models
 
         public UserImage CreateUserImage(string userId, string origImageName, string randomImageName, string thumbImageName, string subDir, string fileType)
         {
-            string s3Path = string.Format("http://{0}.s3.amazonaws.com/{1}", this._awsS3Bucket, GenS3InternalPath(subDir, randomImageName));
-            string s3ThumbPath = string.Format("http://{0}.s3.amazonaws.com/{1}", this._awsS3Bucket, GenS3InternalPath(subDir, thumbImageName));
+            string s3Path = string.Format("http://{0}.s3.amazonaws.com/{1}/{2}", this._awsS3Bucket, subDir, randomImageName);
+            string s3ThumbPath = string.Format("http://{0}.s3.amazonaws.com/{1}/{2}", this._awsS3Bucket, subDir, thumbImageName);
 
             Console.Out.WriteLine(s3Path);
 
@@ -165,9 +165,9 @@ namespace ricoai.Models
             return dbImage;
         }
 
-        public static string GenS3InternalPath(string subdir, string fileName)
-        {
-            return subdir + @"/" + fileName;
-        }
+        //public static string GenS3InternalPath(string subdir, string fileName)
+        //{
+        //    return subdir + @"/" + fileName;
+        //}
     }
 }

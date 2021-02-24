@@ -1,0 +1,16 @@
+.item-wrapper {
+  float: left;
+  width: 80%;
+}
+
+.item {
+  height: 180px;
+  width: 180px;
+  background-color: transparent;
+  margin: 4px;
+  display: inline-block;
+}
+
+.usr-img-dash {
+  width: 180px;
+}

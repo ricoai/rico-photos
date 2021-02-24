@@ -5,6 +5,9 @@ import { from, Observable } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { ApplicationName, ApplicationPaths } from '../../api-authorization/api-authorization.constants';
 import { AuthorizeService, IUser } from '../../api-authorization/authorize.service';
+import { UserImageService } from '../user-image.service';
+import { UserImage } from '../user-image';
+
 
 @Component({
   selector: 'app-dashboard',
@@ -24,22 +27,25 @@ export class DashboardComponent implements OnInit {
 
   public progress: number = 0;
 
-  constructor(private authorizeService: AuthorizeService, private http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
+  userImages: Object;
+
+  constructor(private authorizeService: AuthorizeService, private http: HttpClient, @Inject('BASE_URL') baseUrl: string, private userImageService: UserImageService) {
     this.baseUrl = baseUrl;
   }
 
-  userImages: Object = null;
+
   selectedFiles: File[] = null;
 
-  ngOnInit() {
-    this.isAuthenticated = this.authorizeService.isAuthenticated();
+  async ngOnInit() {
+    //this.isAuthenticated = this.authorizeService.isAuthenticated();
     this.userName = this.authorizeService.getUser().pipe(map(u => u && u.name));
     this.user = this.authorizeService.getUser();
-    this.accessToken = this.authorizeService.getAccessToken();
+    //this.accessToken = this.authorizeService.getAccessToken();
     this.authorizeService.getUserId().subscribe(val => this.userId = val);
-    this.userProfile = this.authorizeService.getUserProfile();
+    //this.userProfile = this.authorizeService.getUserProfile();
 
-    this.http.get(this.baseUrl + 'api/UserImages').subscribe(result => { console.log(result); this.userImages = result; });
+    //this.http.get(this.baseUrl + 'api/UserImages').subscribe(result => { console.log(result); this.userImages = result; });
+    this.userImageService.getUserImages().subscribe(result => this.userImages = result);
     this.progress = 0;
   }
 
@@ -70,9 +76,19 @@ export class DashboardComponent implements OnInit {
         this.progress = Math.round(100 * event.loaded / event.total);
       }
 
-      console.log(event);
+      // Wait for the response
+      if (event.type == HttpEventType.Response) {
+        // Get the latest images uploaded
+        this.userImageService.getUserImages().subscribe(result => this.userImages = result);
+
+        console.log(event);
+      }
 
     }, error => console.error(error));
+
+
+
+
   }
 
 }

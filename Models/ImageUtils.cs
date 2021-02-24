@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -148,7 +149,7 @@ namespace ricoai.Models
             //apply the padding to make a square image
             if (padImage == true)
             {
-                image = applyPaddingToImage(image, Color.Black);
+                image = applyPaddingToImage(image, Color.Transparent);
             }
 
             //check if the with or height of the image exceeds the maximum specified, if so calculate the new dimensions
@@ -313,6 +314,60 @@ namespace ricoai.Models
                 //convert byte array to base64 string
                 return Convert.ToBase64String(bin);
             }
+        }
+
+        /// <summary>
+        /// Get the Meta data from the image.  Then return the data as a JSON string.
+        /// </summary>
+        /// <param name="file">Image file to get the data.</param>
+        /// <returns>JSON string of the image meta data.</returns>
+        public static async Task<string> GetMetaData(IFormFile file)
+        {
+            var dict = new Dictionary<string, string>();
+
+            try
+            {
+                using (var imageMemoryStream = new MemoryStream())
+                {
+
+                    // Add the file to the memory stream
+                    await file.CopyToAsync(imageMemoryStream);
+
+                    using (Bitmap bitmap = new Bitmap(imageMemoryStream))
+                    {
+                        // Get the PropertyItems property from image.
+                        PropertyItem[] propItems = bitmap.PropertyItems;
+
+                        foreach(PropertyItem propItem in propItems)
+                        {
+                            // ASCII
+                            if (propItem.Type == 2)
+                            {
+                                System.Text.ASCIIEncoding encoding = new System.Text.ASCIIEncoding();
+                                dict.Add("0x" + propItem.Id.ToString("X4"), encoding.GetString(propItem.Value));
+                            }
+                            else if(propItem.Type == 3)
+                            {
+                                dict.Add("0x" + propItem.Id.ToString("X4"), BitConverter.ToInt16(propItem.Value).ToString());
+                            }
+                            else if (propItem.Type == 4)
+                            {
+                                dict.Add("0x" + propItem.Id.ToString("X4"), BitConverter.ToInt32(propItem.Value).ToString());
+                            }
+                            else
+                            {
+                                dict.Add("0x" + propItem.Id.ToString("X4"), propItem.Value.ToString());
+                            }
+                        }
+                    }
+
+                }
+            } catch(Exception ex)
+            {
+                Console.Out.WriteLine(ex);
+            }
+
+            return JsonConvert.SerializeObject(dict);
         }
     }
 }

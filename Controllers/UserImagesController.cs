@@ -133,8 +133,10 @@ namespace ricoai
                         // Add the DB entry for the new image
                         //var usrImage = amazon.CreateUserImage(userId, file.FileName, randomFileName, thumbImageName, userId, file.ContentType.ToLower();
 
-                        string s3Path = string.Format("http://{0}.s3.amazonaws.com/{1}", _configuration["aws-cred:photo-bucket"], AmazonUtils.GenS3InternalPath(userId, randomFileName));
-                        string s3ThumbPath = string.Format("http://{0}.s3.amazonaws.com/{1}", _configuration["aws-cred:photo-bucket"], AmazonUtils.GenS3InternalPath(userId, thumbImageName));
+                        string metaJson = await ImagePropsUtil.GetProperties(file);
+
+                        string s3Path = string.Format("http://{0}.s3.amazonaws.com/{1}/{2}", _configuration["aws-cred:photo-bucket"], userId, randomFileName);
+                        string s3ThumbPath = string.Format("http://{0}.s3.amazonaws.com/{1}/{2}", _configuration["aws-cred:photo-bucket"], userId, thumbImageName);
 
                         // Pass the information to the database
                         UserImage usrImage = new UserImage();
@@ -146,6 +148,7 @@ namespace ricoai
                         usrImage.Create = DateTime.Now;
                         usrImage.Modified = DateTime.Now;
                         usrImage.FileType = file.ContentType;
+                        usrImage.MetaData = metaJson;
 
 
                         _context.UserImage.Add(usrImage);

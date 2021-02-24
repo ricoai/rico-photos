@@ -15,3 +15,11 @@
     </div>
   </div>
 </div>
+
+<div class="item-wrapper">
+  <div class="item" *ngFor="let img of userImages" >
+    <a href="{{img.id}}">
+      <img class="usr-img-dash" src="{{img.s3ThumbPath}}" />
+    </a>
+  </div>
+</div>
