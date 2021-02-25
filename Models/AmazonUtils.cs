@@ -1,7 +1,10 @@
-﻿using Amazon.S3;
+﻿using Amazon.Rekognition;
+using Amazon.Rekognition.Model;
+using Amazon.S3;
 using Amazon.S3.Transfer;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -116,7 +119,7 @@ namespace ricoai.Models
 
                 using (Bitmap bitmap = new Bitmap(memoryStream))
                 {
-                    Image thumbImage = ImageUtils.resizeImage(bitmap, padImage:false);
+                    System.Drawing.Image thumbImage = ImageUtils.resizeImage(bitmap, padImage:false);
 
                     // Create a new stream instead of OpenReadStream because the stream could be closed
                     using (var thumbMemoryStream = new MemoryStream())
@@ -165,9 +168,193 @@ namespace ricoai.Models
             return dbImage;
         }
 
-        //public static string GenS3InternalPath(string subdir, string fileName)
-        //{
-        //    return subdir + @"/" + fileName;
-        //}
+        /// <summary>
+        /// Use Amazon Rekognition to detect the face and facial expressions.
+        /// </summary>
+        /// <param name="s3PhotoPath">Image path in S3 Bucket.</param>
+        /// <param name="s3Bucket">S3 Bucket.</param>
+        /// <returns>JSON string of the results from the image.</returns>
+        public async Task<string> DetectFaces(string s3PhotoPath, string s3Bucket)
+        {
+            AmazonRekognitionClient rekognitionClient = new AmazonRekognitionClient(this._awsId, this._awsKey, Amazon.RegionEndpoint.USWest2);
+
+            DetectFacesRequest detectFacesRequest = new DetectFacesRequest()
+            {
+                Image = new Amazon.Rekognition.Model.Image()
+                {
+                    S3Object = new S3Object()
+                    {
+                        Name = s3PhotoPath,
+                        Bucket = s3Bucket
+                    },
+                },
+                // Attributes can be "ALL" or "DEFAULT". 
+                // "DEFAULT": BoundingBox, Confidence, Landmarks, Pose, and Quality.
+                // "ALL": See https://docs.aws.amazon.com/sdkfornet/v3/apidocs/items/Rekognition/TFaceDetail.html
+                Attributes = new List<String>() { "ALL" }
+            };
+
+            try
+            {
+                // Detect facial sediment
+                DetectFacesResponse detectFacesResponse = await rekognitionClient.DetectFacesAsync(detectFacesRequest);
+
+                // Display the results for debugging
+                bool hasAll = detectFacesRequest.Attributes.Contains("ALL");
+                foreach (FaceDetail face in detectFacesResponse.FaceDetails)
+                {
+                    Console.WriteLine("BoundingBox: top={0} left={1} width={2} height={3}", face.BoundingBox.Left,
+                        face.BoundingBox.Top, face.BoundingBox.Width, face.BoundingBox.Height);
+                    Console.WriteLine("Confidence: {0}\nLandmarks: {1}\nPose: pitch={2} roll={3} yaw={4}\nQuality: {5}",
+                        face.Confidence, face.Landmarks.Count, face.Pose.Pitch,
+                        face.Pose.Roll, face.Pose.Yaw, face.Quality);
+                    if (hasAll)
+                        Console.WriteLine("The detected face is estimated to be between " +
+                            face.AgeRange.Low + " and " + face.AgeRange.High + " years old.");
+                }
+
+                return JsonConvert.SerializeObject(detectFacesResponse);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            return "";
+        }
+
+        /// <summary>
+        /// Use Amazon Rekognition to detect objects.
+        /// </summary>
+        /// <param name="s3PhotoPath">Image path in S3 Bucket.</param>
+        /// <param name="s3Bucket">S3 Bucket.</param>
+        /// <returns>JSON string of the results from the image.</returns>
+        public async Task<string> DetectObjects(string s3PhotoPath, string s3Bucket)
+        {
+            AmazonRekognitionClient rekognitionClient = new AmazonRekognitionClient(this._awsId, this._awsKey, Amazon.RegionEndpoint.USWest2);
+
+            DetectLabelsRequest detectlabelsRequest = new DetectLabelsRequest()
+            {
+                Image = new Amazon.Rekognition.Model.Image()
+                {
+                    S3Object = new S3Object()
+                    {
+                        Name = s3PhotoPath,
+                        Bucket = s3Bucket
+                    },
+                },
+                MaxLabels = 10,
+                MinConfidence = 75F
+            };
+
+            try
+            {
+                // Get all the objects found in the image
+                DetectLabelsResponse detectLabelsResponse = await rekognitionClient.DetectLabelsAsync(detectlabelsRequest);
+                
+                // Output for debugging
+                Console.WriteLine("Detected labels for " + s3PhotoPath);
+                foreach (Label label in detectLabelsResponse.Labels)
+                    Console.WriteLine("{0}: {1}", label.Name, label.Confidence);
+
+
+                return JsonConvert.SerializeObject(detectLabelsResponse);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            return "";
+        }
+
+
+        /// <summary>
+        /// Use Amazon Rekognition to detect the moderation of the image if there is sexual content.
+        /// </summary>
+        /// <param name="s3PhotoPath">Image path in S3 Bucket.</param>
+        /// <param name="s3Bucket">S3 Bucket.</param>
+        /// <returns>JSON string of the results from the image.</returns>
+        public async Task<string> DetectModeration(string s3PhotoPath, string s3Bucket)
+        {
+            AmazonRekognitionClient rekognitionClient = new AmazonRekognitionClient(this._awsId, this._awsKey, Amazon.RegionEndpoint.USWest2);
+
+            DetectModerationLabelsRequest detectlabelsRequest = new DetectModerationLabelsRequest()
+            {
+                Image = new Amazon.Rekognition.Model.Image()
+                {
+                    S3Object = new S3Object()
+                    {
+                        Name = s3PhotoPath,
+                        Bucket = s3Bucket
+                    },
+                },
+                //HumanLoopConfig = 
+                MinConfidence = 75F
+            };
+
+            try
+            {
+                // Get all the objects found in the image
+                DetectModerationLabelsResponse detectLabelsResponse = await rekognitionClient.DetectModerationLabelsAsync(detectlabelsRequest);
+
+                // Output for debugging
+                Console.WriteLine("Detected labels for " + s3PhotoPath);
+                foreach (ModerationLabel label in detectLabelsResponse.ModerationLabels)
+                    Console.WriteLine("{0}: {1}", label.Name, label.Confidence);
+
+
+                return JsonConvert.SerializeObject(detectLabelsResponse);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            return "";
+        }
+
+
+        /// <summary>
+        /// Use Amazon Rekognition to detect the moderation of the image if there is sexual content.
+        /// </summary>
+        /// <param name="s3PhotoPath">Image path in S3 Bucket.</param>
+        /// <param name="s3Bucket">S3 Bucket.</param>
+        /// <returns>JSON string of the results from the image.</returns>
+        public async Task<string> DetectText(string s3PhotoPath, string s3Bucket)
+        {
+            AmazonRekognitionClient rekognitionClient = new AmazonRekognitionClient(this._awsId, this._awsKey, Amazon.RegionEndpoint.USWest2);
+
+            DetectTextRequest detectlabelsRequest = new DetectTextRequest()
+            {
+                Image = new Amazon.Rekognition.Model.Image()
+                {
+                    S3Object = new S3Object()
+                    {
+                        Name = s3PhotoPath,
+                        Bucket = s3Bucket
+                    },
+                },
+                //Filters = 
+            };
+
+            try
+            {
+                // Get all the objects found in the image
+                DetectTextResponse detectLabelsResponse = await rekognitionClient.DetectTextAsync(detectlabelsRequest);
+
+                // Output for debugging
+                Console.WriteLine("Detected labels for " + s3PhotoPath);
+                //foreach(TextDetection label in detectLabelsResponse.TextDetections)
+
+                return JsonConvert.SerializeObject(detectLabelsResponse);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine(e.Message);
+            }
+
+            return "";
+        }
     }
 }

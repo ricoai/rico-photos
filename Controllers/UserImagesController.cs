@@ -130,6 +130,15 @@ namespace ricoai
                         AmazonUtils amazon = new AmazonUtils(_configuration["aws-cred:id"], _configuration["aws-cred:key"], _configuration["aws-cred:photo-bucket"]);
                         await amazon.UploadImageAndThumbToS3(file, userId, randomFileName, thumbImageName);
 
+                        // Use Amazon AI to detect faces on the image
+                        string jsonAiFaces = await amazon.DetectFaces(userId + @"/" + randomFileName, _configuration["aws-cred:photo-bucket"]);
+
+                        string jsonAiObjects = await amazon.DetectObjects(userId + @"/" + randomFileName, _configuration["aws-cred:photo-bucket"]);
+
+                        string jsonAiModeration = await amazon.DetectModeration(userId + @"/" + randomFileName, _configuration["aws-cred:photo-bucket"]);
+
+                        string jsonAiText = await amazon.DetectText(userId + @"/" + randomFileName, _configuration["aws-cred:photo-bucket"]);
+
                         // Add the DB entry for the new image
                         //var usrImage = amazon.CreateUserImage(userId, file.FileName, randomFileName, thumbImageName, userId, file.ContentType.ToLower();
 
@@ -149,6 +158,10 @@ namespace ricoai
                         usrImage.Modified = DateTime.Now;
                         usrImage.FileType = file.ContentType;
                         usrImage.MetaData = metaJson;
+                        usrImage.AiFacialTags = jsonAiFaces;
+                        usrImage.AiObjectsTags = jsonAiObjects;
+                        usrImage.AiModerationTags = jsonAiModeration;
+                        usrImage.AiTextInImageTags = jsonAiText;
 
 
                         _context.UserImage.Add(usrImage);

@@ -21,6 +21,13 @@ namespace ricoai.Models
         public string UserId { get; set; }
 
         /// <summary>
+        /// Set whether this image is public which means anyone can view the image and will
+        /// be visiable on the main page.
+        /// </summary>
+        [Required]
+        public bool IsPublic { get; set; }
+
+        /// <summary>
         /// Date and time the image was created.
         /// </summary>
         public DateTime Create { get; set; }
@@ -61,18 +68,33 @@ namespace ricoai.Models
         public string MetaData { get; set; }
 
         /// <summary>
-        /// Tags to self label the image.
+        /// Tags to self label the image.  JSON String.
         /// </summary>
-        public string[] Tags { get; set; }
+        public string Tags { get; set; }
 
         /// <summary>
         /// Album IDs.
         /// </summary>
-        public int[] AlbumIds { get; set; }
+        //public int[] AlbumIds { get; set; }
 
         /// <summary>
-        /// AI tags and labels.  JSON String.
+        /// AI Objects tags and labels.  This will find any labels for objects in the image.  JSON String.
         /// </summary>
-        public string AiTags { get; set; }
+        public string AiObjectsTags { get; set; }
+
+        /// <summary>
+        /// AI Facial Analysis tags and labels.  This will find any labels for facial experiences and sediment. JSON String.
+        /// </summary>
+        public string AiFacialTags { get; set; }
+
+        /// <summary>
+        /// AI Image Moderation tags and labels.  This will determine if the file has any sexual situations.  JSON String.
+        /// </summary>
+        public string AiModerationTags { get; set; }
+
+        /// <summary>
+        /// AI Text in Image.  This will determine if any text is in the image.  JSON String.
+        /// </summary>
+        public string AiTextInImageTags { get; set; }
     }
 }
