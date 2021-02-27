@@ -11,6 +11,8 @@ export interface UserImage {
   s3Path: string;
   s3ThumbPath: string;
   fileType: string;
+  fileSizeBytes: number;
+  fileSizeStr: string;
   metaData: string;
   width: number;
   height: number;

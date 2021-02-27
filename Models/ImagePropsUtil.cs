@@ -84,6 +84,8 @@ namespace ricoai.Models
 
             public float GpsAltitude { get; set; }
 
+            public long ImageSizeBytes { get; set; }
+
             public string JsonMeta { get; set; }
         }
 
@@ -218,14 +220,14 @@ namespace ricoai.Models
                         break;
                     case 0x011a:
                         string[] splitStr_XRes = value.Split(',');
-                        int val1_XRes = int.Parse(splitStr_XRes[0]);
-                        int val2_XRes = int.Parse(splitStr_XRes[1]);
+                        float val1_XRes = float.Parse(splitStr_XRes[0]);
+                        float val2_XRes = float.Parse(splitStr_XRes[1]);
                         meta.XResolution = val1_XRes / val2_XRes;
                         break;
                     case 0x011b:
                         string[] splitStr_YRes = value.Split(',');
-                        int val1_YRes = int.Parse(splitStr_YRes[0]);
-                        int val2_YRes = int.Parse(splitStr_YRes[1]);
+                        float val1_YRes = float.Parse(splitStr_YRes[0]);
+                        float val2_YRes = float.Parse(splitStr_YRes[1]);
                         meta.YResolution = val1_YRes / val2_YRes;
                         break;
                     case 0x0128:
@@ -246,8 +248,8 @@ namespace ricoai.Models
                         break;
                     case 0x829d:
                         string[] splitStr_FNum = value.Split(',');
-                        int val1_FNum = int.Parse(splitStr_FNum[0]);
-                        int val2_FNum = int.Parse(splitStr_FNum[1]);
+                        float val1_FNum = float.Parse(splitStr_FNum[0]);
+                        float val2_FNum = float.Parse(splitStr_FNum[1]);
                         meta.ExifFNumber = val1_FNum / val2_FNum;
                         break;
                     case 0x8822:
@@ -264,32 +266,32 @@ namespace ricoai.Models
                         break;
                     case 0x9201:
                         string[] splitStr_ShutSpd = value.Split(',');
-                        int val1_ShutSpd = int.Parse(splitStr_ShutSpd[0]);
-                        int val2_ShutSpd = int.Parse(splitStr_ShutSpd[1]);
+                        float val1_ShutSpd = float.Parse(splitStr_ShutSpd[0]);
+                        float val2_ShutSpd = float.Parse(splitStr_ShutSpd[1]);
                         meta.ExifShutterSpeed = val1_ShutSpd / val2_ShutSpd;
                         break;
                     case 0x9202:
                         string[] splitStr_Apt = value.Split(',');
-                        int val1_Apt = int.Parse(splitStr_Apt[0]);
-                        int val2_Apt = int.Parse(splitStr_Apt[1]);
+                        float val1_Apt = float.Parse(splitStr_Apt[0]);
+                        float val2_Apt = float.Parse(splitStr_Apt[1]);
                         meta.ExifAperture = val1_Apt / val2_Apt;
                         break;
                     case 0x9203:
                         string[] splitStr_Bright = value.Split(',');
-                        int val1_Bright = int.Parse(splitStr_Bright[0]);
-                        int val2_Bright = int.Parse(splitStr_Bright[1]);
+                        float val1_Bright = float.Parse(splitStr_Bright[0]);
+                        float val2_Bright = float.Parse(splitStr_Bright[1]);
                         meta.ExifBrigthness = val1_Bright / val2_Bright;
                         break;
                     case 0x9204:
                         string[] splitStr_ExpBias = value.Split(',');
-                        int val1_ExpBias = int.Parse(splitStr_ExpBias[0]);
-                        int val2_ExpBias = int.Parse(splitStr_ExpBias[1]);
+                        float val1_ExpBias = float.Parse(splitStr_ExpBias[0]);
+                        float val2_ExpBias = float.Parse(splitStr_ExpBias[1]);
                         meta.ExifExposureBias = val1_ExpBias / val2_ExpBias;
                         break;
                     case 0x9205:
                         string[] splitStr_MaxApt = value.Split(',');
-                        int val1_MaxApt = int.Parse(splitStr_MaxApt[0]);
-                        int val2_MaxApt = int.Parse(splitStr_MaxApt[1]);
+                        float val1_MaxApt = float.Parse(splitStr_MaxApt[0]);
+                        float val2_MaxApt = float.Parse(splitStr_MaxApt[1]);
                         meta.ExifMaxAperture = val1_MaxApt / val2_MaxApt;
                         break;
                     case 0x9207:
@@ -300,8 +302,8 @@ namespace ricoai.Models
                         break;
                     case 0x920a:
                         string[] splitStr_Focal = value.Split(',');
-                        int val1_Focal = int.Parse(splitStr_Focal[0]);
-                        int val2_Focal = int.Parse(splitStr_Focal[1]);
+                        float val1_Focal = float.Parse(splitStr_Focal[0]);
+                        float val2_Focal = float.Parse(splitStr_Focal[1]);
                         meta.ExifFocalLength = val1_Focal / val2_Focal;
                         break;
                     case 0x9290:
@@ -327,16 +329,16 @@ namespace ricoai.Models
                         break;
                     case 0x0002:
                         string[] splitStr_Lat = value.Split(',');
-                        int val1_Lat = int.Parse(splitStr_Lat[0]);
-                        int val2_Lat = int.Parse(splitStr_Lat[1]);
+                        float val1_Lat = float.Parse(splitStr_Lat[0]);
+                        float val2_Lat = float.Parse(splitStr_Lat[1]);
                         float latDeg = val1_Lat / val2_Lat;
 
-                        int val3_lat = int.Parse(splitStr_Lat[2]);
-                        int val4_lat = int.Parse(splitStr_Lat[3]);
+                        float val3_lat = float.Parse(splitStr_Lat[2]);
+                        float val4_lat = float.Parse(splitStr_Lat[3]);
                         float latMin = val3_lat / val4_lat;
 
-                        int val5_lat = int.Parse(splitStr_Lat[4]);
-                        int val6_lat = int.Parse(splitStr_Lat[5]);
+                        float val5_lat = float.Parse(splitStr_Lat[4]);
+                        float val6_lat = float.Parse(splitStr_Lat[5]);
                         float latSec = val5_lat / val6_lat;
 
                         meta.GpsLatitude = latDeg + (latMin / 60.0f) + (latSec / 3600.0f);
@@ -346,24 +348,24 @@ namespace ricoai.Models
                         break;
                     case 0x0004:
                         string[] splitStr_Lon = value.Split(',');
-                        int val1_Lon = int.Parse(splitStr_Lon[0]);
-                        int val2_Lon = int.Parse(splitStr_Lon[1]);
+                        float val1_Lon = float.Parse(splitStr_Lon[0]);
+                        float val2_Lon = float.Parse(splitStr_Lon[1]);
                         float lonDeg = val1_Lon / val2_Lon;
 
-                        int val3_lon = int.Parse(splitStr_Lon[2]);
-                        int val4_lon = int.Parse(splitStr_Lon[3]);
+                        float val3_lon = float.Parse(splitStr_Lon[2]);
+                        float val4_lon = float.Parse(splitStr_Lon[3]);
                         float lonMin = val3_lon / val4_lon;
 
-                        int val5_lon = int.Parse(splitStr_Lon[4]);
-                        int val6_lon = int.Parse(splitStr_Lon[5]);
+                        float val5_lon = float.Parse(splitStr_Lon[4]);
+                        float val6_lon = float.Parse(splitStr_Lon[5]);
                         float lonSec = val5_lon / val6_lon;
 
-                        meta.GpsLatitude = lonDeg + (lonMin / 60.0f) + (lonSec / 3600.0f);
+                        meta.GpsLongitude = lonDeg + (lonMin / 60.0f) + (lonSec / 3600.0f);
                         break;
                     case 0x0006:
                         string[] splitStr_Alt = value.Split(',');
-                        int val1_Alt = int.Parse(splitStr_Alt[0]);
-                        int val2_Alt = int.Parse(splitStr_Alt[1]);
+                        float val1_Alt = float.Parse(splitStr_Alt[0]);
+                        float val2_Alt = float.Parse(splitStr_Alt[1]);
                         meta.GpsAltitude = val1_Alt / val2_Alt;
                         break;
                 }

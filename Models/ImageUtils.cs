@@ -30,6 +30,16 @@ namespace ricoai.Models
             /// 2 = Square
             /// </summary>
             public short Orientation { get; set; }
+
+            /// <summary>
+            /// Get the number of bytes in the image
+            /// </summary>
+            public long SizeBytes { get; set; }
+
+            /// <summary>
+            /// Print pretty version of the image size.
+            /// </summary>
+            public string SizeStr { get; set; }
         }
 
         /// <summary>
@@ -156,8 +166,7 @@ namespace ricoai.Models
                 imgDim.Width = bitmap.Width;
                 imgDim.Height = bitmap.Height;
 
-
-                //first we check if the image needs rotating (eg phone held vertical when taking a picture for example)
+                // Get the orientation value from the properites to determine the orientation
                 foreach (var prop in bitmap.PropertyItems)
                 {
                     if (prop.Id == 0x0112)
@@ -181,6 +190,10 @@ namespace ricoai.Models
                         }  
                     }
                 }
+
+                // Get the size of the image
+                imgDim.SizeBytes = postedFile.OpenReadStream().Length;
+                imgDim.SizeStr = BytesToString(imgDim.SizeBytes);
 
                 // THIS DID NOT WORK FOR CELL PHONE IMAGES
                 // DIMENSIONS WERE BASICALLY NOT CHANGING BASED ON ORIENTATION
@@ -214,6 +227,24 @@ namespace ricoai.Models
             }
 
             return imgDim;
+        }
+
+        /// <summary>
+        /// Convert the number of bytes to a pretty version of the file size.
+        /// 
+        /// https://stackoverflow.com/a/4975942/1380462
+        /// </summary>
+        /// <param name="byteCount">Number of bytes.</param>
+        /// <returns>String representing the file size.</returns>
+        static String BytesToString(long byteCount)
+        {
+            string[] suf = { "B", "KB", "MB", "GB", "TB", "PB", "EB" }; //Longs run out around EB
+            if (byteCount == 0)
+                return "0" + suf[0];
+            long bytes = Math.Abs(byteCount);
+            int place = Convert.ToInt32(Math.Floor(Math.Log(bytes, 1024)));
+            double num = Math.Round(bytes / Math.Pow(1024, place), 1);
+            return (Math.Sign(byteCount) * num).ToString() + suf[place];
         }
 
         /// <summary>

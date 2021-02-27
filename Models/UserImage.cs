@@ -81,6 +81,16 @@ namespace ricoai.Models
         public string FileType { get; set; }
 
         /// <summary>
+        /// The file size in bytes.
+        /// </summary>
+        public long FileSizeBytes { get; set; }
+
+        /// <summary>
+        /// File size as a print pretty file size string.
+        /// </summary>
+        public string FileSizeStr { get; set; }
+
+        /// <summary>
         /// Meta Data of the image.  JSON string.
         /// </summary>
         public string MetaData { get; set; }

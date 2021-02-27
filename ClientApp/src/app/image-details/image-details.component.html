@@ -1,19 +1,113 @@
 <div *ngIf="userImage">
 
   <div class="row">
+    <div class="col-md-8">
+      <img class="usr-img-details" src="{{userImage.s3Path}}" />
+    </div>
+
     <div class="col-md-4">
       <ul class="list-group">
         <li class="list-group-item">Details</li>
         <li class="list-group-item">
-
+          <div class="row">
+            <div class="col-sm-2">
+              <div class="detail-text">
+                <span class="material-icons">today</span>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="detail-text">
+                {{userImage.metaData.ExifDTOrig}}
+              </div>
+            </div>
+          </div>
         </li>
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col-sm-2">
+              <div class="detail-text">
+                <span class="material-icons">image</span>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="row">
+                <div class="detail-text">
+                  {{userImage.origImageName}}
+                </div>
+              </div>
+              <div class="row">
+                <div class="detail-text">
+                  {{userImage.width}}x{{userImage.height}}   {{userImage.fileSizeStr}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col-sm-2">
+              <div class="detail-text">
+                <span class="material-icons">camera</span>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="row">
+                <div class="detail-text">
+                  {{userImage.metaData.EquipMake}} {{userImage.metaData.EquipModel}}
+                </div>
+              </div>
+              <div class="row">
+                <div class="detail-text">
+                  ƒ/{{userImage.metaData.ExifFNumber}}   {{userImage.metaData.ExifExposureTime}}   {{userImage.metaData.ExifFocalLength}}mm   ISO{{userImage.metaData.ExifISOSpeed}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="list-group-item">
+          <div class="row">
+            <div class="col-sm-2">
+              <div class="detail-text">
+                <span class="material-icons">location_on</span>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="row">
+                <div class="detail-text">
+                  {{userImage.metaData.GpsLatitude}} {{userImage.metaData.GpsLatitudeRef}}, {{userImage.metaData.GpsLongitude}} {{userImage.metaData.GpsLongitudeRef}}
+                </div>
+              </div>
+              <div class="row">
+                <div class="detail-text">
 
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li class="list-group-item">AI [Object Detection]</li>
+        <li class="list-group-item" *ngFor="let obj of userImage.aiObjectsTags.Labels">
+          <div class="row">
+            <div class="col-sm-2">
+              <div class="detail-text">
+                <span class="material-icons">saved_search</span>
+              </div>
+            </div>
+            <div class="col-sm-6">
+              <div class="row">
+                <div class="detail-text">
+                  {{obj.Name}}
+                </div>
+              </div>
+              <div class="row">
+                <div class="detail-text">
+                  {{obj.Confidence}}
+                </div>
+              </div>
+            </div>
+          </div>
+        </li>
       </ul>
-    </div>
-
-    <div class="col-md-8">
-      <img class="usr-img-details" src="{{userImage.s3Path}}" />
-    </div>
   </div>
-
+  </div>
 </div>

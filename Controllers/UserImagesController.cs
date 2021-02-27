@@ -165,6 +165,8 @@ namespace ricoai
                         usrImage.AiObjectsTags = jsonAiObjects;
                         usrImage.AiModerationTags = jsonAiModeration;
                         usrImage.AiTextInImageTags = jsonAiText;
+                        usrImage.FileSizeBytes = imgDim.SizeBytes;
+                        usrImage.FileSizeStr = imgDim.SizeStr;
 
 
                         _context.UserImage.Add(usrImage);

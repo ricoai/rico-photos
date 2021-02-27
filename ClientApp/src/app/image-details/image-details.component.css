@@ -2,3 +2,9 @@
   max-width: 1270px;
   max-height: 720px;
 }
+
+.detail-text {
+  font-size: 10px;
+  font-family: Roboto;
+  color: darkgrey;
+}
