@@ -48,6 +48,24 @@ namespace ricoai.Models
         public string ImageName { get; set; }
 
         /// <summary>
+        /// Width of the original image in pixels.
+        /// </summary>
+        public int Width { get; set; }
+
+        /// <summary>
+        /// Height of the original image in pixels.
+        /// </summary>
+        public int Height { get; set; }
+
+        /// <summary>
+        /// Get the orientation of the image.
+        /// Landscape = 0
+        /// Portrait = 1
+        /// Square = 2
+        /// </summary>
+        public int Orientation { get; set; }
+
+        /// <summary>
         /// Path to the image on AWS S3.
         /// </summary>
         public string S3Path { get; set; }

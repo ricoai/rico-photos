@@ -7,6 +7,7 @@ import { ApplicationName, ApplicationPaths } from '../../api-authorization/api-a
 import { AuthorizeService, IUser } from '../../api-authorization/authorize.service';
 import { UserImageService } from '../user-image.service';
 import { UserImage } from '../user-image';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -27,16 +28,20 @@ export class DashboardComponent implements OnInit {
 
   public progress: number = 0;
 
-  userImages: Object;
+  userImages: any = [];
 
-  constructor(private authorizeService: AuthorizeService, private http: HttpClient, @Inject('BASE_URL') baseUrl: string, private userImageService: UserImageService) {
+  constructor(private authorizeService: AuthorizeService,
+    private http: HttpClient,
+    @Inject('BASE_URL') baseUrl: string,
+    private router: Router,
+    private userImageService: UserImageService) {
     this.baseUrl = baseUrl;
   }
 
-
+  // Hold all the selected files
   selectedFiles: File[] = null;
 
-  async ngOnInit() {
+   async ngOnInit() {
     //this.isAuthenticated = this.authorizeService.isAuthenticated();
     this.userName = this.authorizeService.getUser().pipe(map(u => u && u.name));
     this.user = this.authorizeService.getUser();
@@ -44,8 +49,9 @@ export class DashboardComponent implements OnInit {
     this.authorizeService.getUserId().subscribe(val => this.userId = val);
     //this.userProfile = this.authorizeService.getUserProfile();
 
-    //this.http.get(this.baseUrl + 'api/UserImages').subscribe(result => { console.log(result); this.userImages = result; });
-    this.userImageService.getUserImages().subscribe(result => this.userImages = result);
+     //this.http.get(this.baseUrl + 'api/UserImages').subscribe(result => { console.log(result); this.userImages = result; });
+     this.getUserImages();
+    //this.userImages = await this.userImageService.getUserImages();
     this.progress = 0;
   }
 
@@ -55,7 +61,7 @@ export class DashboardComponent implements OnInit {
     this.selectedFiles = <File[]>event.target.files;
   }
 
-  onUpload() {
+  async onUpload() {
     const fd = new FormData();
 
     // Images loaded into the form data
@@ -79,16 +85,38 @@ export class DashboardComponent implements OnInit {
       // Wait for the response
       if (event.type == HttpEventType.Response) {
         // Get the latest images uploaded
-        this.userImageService.getUserImages().subscribe(result => this.userImages = result);
+        this.getUserImages();
 
         console.log(event);
+
+        // Clear the entry
+        this.selectedFiles = null;
       }
 
     }, error => console.error(error));
+  }
 
+  gotoDetails(img): void {
+    this.router.navigate(['/image', img.id]);
+  }
 
+  getUserImages() {
+    this.userImageService.getUserImages().subscribe(result => {
+      this.userImages = result
 
+      // Convert the JSON strings to JSON
+      //for (var x = 0; x < this.userImages.length; x++) {
+      //  this.userImages[x].metaData = JSON.parse(this.userImages[x].metaData);
+      //}
+    });
+  }
 
+  isPortrait(img: UserImage): boolean {
+    if (img.orientation == 1) {
+      return true;
+    }
+
+    return false;
   }
 
 }

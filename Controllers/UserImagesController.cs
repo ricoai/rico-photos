@@ -114,7 +114,7 @@ namespace ricoai
                     bool isImage = ImageUtils.IsImage(file);
                     if (isImage)
                     {
-                        Console.Out.WriteLine("Good");
+                        ImageUtils.ImageDimension imgDim = ImageUtils.GetDimension(file);
 
                         // Create a random file name for the file
                         string randomFileName = Path.GetRandomFileName();
@@ -157,6 +157,9 @@ namespace ricoai
                         usrImage.Create = DateTime.Now;
                         usrImage.Modified = DateTime.Now;
                         usrImage.FileType = file.ContentType;
+                        usrImage.Width = imgDim.Width;
+                        usrImage.Height = imgDim.Height;
+                        usrImage.Orientation = imgDim.Orientation;
                         usrImage.MetaData = metaJson;
                         usrImage.AiFacialTags = jsonAiFaces;
                         usrImage.AiObjectsTags = jsonAiObjects;

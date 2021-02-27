@@ -10,7 +10,6 @@ export class UserImageService {
   // Properties
   // Base URL to use API
   private baseUrl: string;
-  userImages: any;
 
   constructor(private http: HttpClient, @Inject('BASE_URL') baseUrl: string)
   {
@@ -21,13 +20,31 @@ export class UserImageService {
   // Get the User Images
   getUserImages() {
 
+    //var userImages: any = [];
+
+    // Use the API to get the user images
+    /**
+    await this.http.get(this.baseUrl + 'api/UserImages')
+      .subscribe(result => {
+        console.log(result);
+
+        userImages = result;
+
+        // Convert the JSON strings to JSON
+        for (var x = 0; x < userImages.length; x++) {
+          userImages[x].metaData = JSON.parse(userImages[x].metaData);
+        }
+        return userImages;
+      });
+      */
+
     // Use the API to get the user images
     return this.http.get(this.baseUrl + 'api/UserImages');
-      //.subscribe(result => {
-      //  console.log(result);
-      //  this.userImages = result;
-      //});
 
-    //return this.userImages;
-  } 
+    //return userImages;
+  }
+
+  getUserImage(id: string) {
+    return this.http.get(this.baseUrl + 'api/UserImages/' + id)
+  }
 }

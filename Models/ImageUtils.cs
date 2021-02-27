@@ -18,6 +18,20 @@ namespace ricoai.Models
     /// </summary>
     public static class ImageUtils
     {
+        public class ImageDimension
+        {
+            public int Width { get; set; }
+            public int Height { get; set; }
+
+            /// <summary>
+            /// Orientation
+            /// 0 = Landscape
+            /// 1 = Portrait
+            /// 2 = Square
+            /// </summary>
+            public short Orientation { get; set; }
+        }
+
         /// <summary>
         /// Minimum number of bytes an image should have to verify the image is good.
         /// </summary>
@@ -118,6 +132,89 @@ namespace ricoai.Models
             return true;
         }
 
+        /// <summary>
+        /// Get the image dimension and orientation.
+        /// This will get the image width, height and orientation.
+        /// 
+        /// Orientation:
+        /// Landscape = 0
+        /// Portrait = 1
+        /// Square = 2
+        /// </summary>
+        /// <param name="postedFile">IFormFile from the form from the API.</param>
+        /// <returns></returns>
+        public static ImageDimension GetDimension(this IFormFile postedFile)
+        {
+            ImageDimension imgDim = new ImageDimension();
+
+            try
+            {
+                // Open a file stream to the image
+                var bitmap = new Bitmap(postedFile.OpenReadStream());
+
+                // Get the length and width
+                imgDim.Width = bitmap.Width;
+                imgDim.Height = bitmap.Height;
+
+
+                //first we check if the image needs rotating (eg phone held vertical when taking a picture for example)
+                foreach (var prop in bitmap.PropertyItems)
+                {
+                    if (prop.Id == 0x0112)
+                    {
+                        int orientationValue = bitmap.GetPropertyItem(prop.Id).Value[0];
+                        switch(orientationValue)
+                        { 
+                            case 6:
+                            case 8:
+                                // Portrait
+                                imgDim.Orientation = 1;
+                            break;
+                            case 1:
+                                // Landscape
+                                imgDim.Orientation = 0;
+                                break;
+                            default:
+                                // Default to portrait
+                                imgDim.Orientation = 1;
+                            break;
+                        }  
+                    }
+                }
+
+                // THIS DID NOT WORK FOR CELL PHONE IMAGES
+                // DIMENSIONS WERE BASICALLY NOT CHANGING BASED ON ORIENTATION
+                /**
+                // Get the orientation
+                if (bitmap.Width > bitmap.Height)
+                {
+                    // Landscape
+                    imgDim.Orientation = 0;
+                }
+                else if (bitmap.Width < bitmap.Height)
+                {
+                    // Portrait
+                    imgDim.Orientation = 1;
+                }
+                else
+                {
+                    // Square
+                    imgDim.Orientation = 3;
+                }
+                */
+
+            }
+            catch (Exception)
+            {
+                return imgDim;
+            }
+            finally
+            {
+                postedFile.OpenReadStream().Position = 0;
+            }
+
+            return imgDim;
+        }
 
         /// <summary>
         /// Resize the image to craete a thumbnail.
@@ -314,6 +411,28 @@ namespace ricoai.Models
                 //convert byte array to base64 string
                 return Convert.ToBase64String(bin);
             }
+        }
+
+        /// <summary>
+        /// Check the orientation of the image.  Is it Portrait, Landscape or Square.
+        /// </summary>
+        /// <param name="image">Image to detect.</param>
+        /// <returns>0 = Landscape, 1 = Portrait orientation, 2 = Square</returns>
+        public static int Orientation(Image image)
+        {
+            if(image.Width > image.Height)
+            {
+                // Landscape
+                return 0;
+            }
+            else if(image.Width < image.Height)
+            {
+                // Portrait
+                return 1;
+            }
+
+            // Square
+            return 3;
         }
 
         /// <summary>

@@ -12,6 +12,81 @@ namespace ricoai.Models
 {
     public static class ImagePropsUtil
     {
+        public class ImageMeta
+        {
+            public short ImageWidth { get; set; }
+            public short ImageHeight { get; set; }
+            public string EquipMake { get; set; }
+            public string EquipModel { get; set; }
+            public short Orientation { get; set; }
+            public float XResolution { get; set; }
+            public float YResolution { get; set; }
+
+            public string ResolutionUnit { get; set; }
+
+            public string SoftwareUsed { get; set; }
+
+            public string DateTime { get; set; }
+
+            public short YCbCrPosition { get; set; }
+
+            public string ExifExposureTime { get; set; }
+
+            public float ExifFNumber { get; set; }
+
+            public short ExifExposureProg { get; set; }
+
+            public short ExifISOSpeed { get; set; }
+
+            public string ExifDTOrig { get; set; }
+
+            public string ExifDTDigitized { get; set; }
+
+            public float ExifShutterSpeed { get; set; }
+
+            public float ExifAperture { get; set; }
+
+            public float ExifBrigthness { get; set; }
+
+            public float ExifExposureBias { get; set; }
+
+            public float ExifMaxAperture { get; set; }
+
+            public short ExifMeteringMode { get; set; }
+
+            public short ExifFlash { get; set; }
+
+            public float ExifFocalLength { get; set; }
+
+            public string ExifDTSubsec { get; set; }
+
+            public string ExifDTOrigSS { get; set; }
+
+            public string ExifDTDigSS { get; set; }
+
+            public short ExifColorSpace { get; set; }
+
+            public long ExifPixXDim { get; set; }
+
+            public long ExifPixYDim { get; set; }
+
+            public short ExifSensingMethod { get; set; }
+
+            public short ExifSceneType { get; set; }
+
+            public float GpsLongitude { get; set; }
+
+            public string GpsLongitudeRef { get; set; }
+
+            public float GpsLatitude { get; set; }
+
+            public string GpsLatitudeRef { get; set; }
+
+            public float GpsAltitude { get; set; }
+
+            public string JsonMeta { get; set; }
+        }
+
         protected class ImageProps
         {
             public string ItemNum { get; set; }
@@ -56,6 +131,8 @@ namespace ricoai.Models
             // Get the PropertyItems property from image.
             var propItems = image.PropertyItems;
 
+            ImageMeta meta = new ImageMeta();
+
             // For each PropertyItem in the array, display the ID, type, and length.
             int count = 0;
             foreach (var propItem in propItems)
@@ -72,9 +149,14 @@ namespace ricoai.Models
                 imgProp.Value = propItem.ReadPropertValueAsString().Trim(100);
 
                 list.Add(imgProp);
+
+                // Set the meta data to the object
+                DecodePropertyItem(propItem, ref meta);
             }
 
-            return JsonConvert.SerializeObject(list);
+            meta.JsonMeta = JsonConvert.SerializeObject(list);
+
+            return JsonConvert.SerializeObject(meta);
         }
 
         /// <summary>
@@ -106,8 +188,194 @@ namespace ricoai.Models
             return "";
         }
 
+        /// <summary>
+        /// Decode the property value to an actual value.
+        /// </summary>
+        /// <param name="propItem">Property item of the image.</param>
+        /// <param name="meta">Reference to meta object.</param>
+        public static void DecodePropertyItem(PropertyItem propItem, ref ImageMeta meta)
+        {
+            try
+            {
+                string value = propItem.ReadPropertValueAsString().Trim(100);
 
-                        const int BYTES = 1;
+                switch (propItem.Id)
+                {
+                    case 0x0100:
+                        meta.ImageWidth = short.Parse(value);
+                        break;
+                    case 0x0101:
+                        meta.ImageHeight = short.Parse(value);
+                        break;
+                    case 0x010f:
+                        meta.EquipMake = value;
+                        break;
+                    case 0x0110:
+                        meta.EquipModel = value;
+                        break;
+                    case 0x0112:
+                        meta.Orientation = short.Parse(value);
+                        break;
+                    case 0x011a:
+                        string[] splitStr_XRes = value.Split(',');
+                        int val1_XRes = int.Parse(splitStr_XRes[0]);
+                        int val2_XRes = int.Parse(splitStr_XRes[1]);
+                        meta.XResolution = val1_XRes / val2_XRes;
+                        break;
+                    case 0x011b:
+                        string[] splitStr_YRes = value.Split(',');
+                        int val1_YRes = int.Parse(splitStr_YRes[0]);
+                        int val2_YRes = int.Parse(splitStr_YRes[1]);
+                        meta.YResolution = val1_YRes / val2_YRes;
+                        break;
+                    case 0x0128:
+                        meta.ResolutionUnit = value;
+                        break;
+                    case 0x0131:
+                        meta.SoftwareUsed = value;
+                        break;
+                    case 0x0132:
+                        meta.DateTime = value;
+                        break;
+                    case 0x0213:
+                        meta.YCbCrPosition = short.Parse(value);
+                        break;
+                    case 0x829a:
+                        string[] splitStr_ExpTime = value.Split(',');
+                        meta.ExifExposureTime = splitStr_ExpTime[0] + "/" + splitStr_ExpTime[1];
+                        break;
+                    case 0x829d:
+                        string[] splitStr_FNum = value.Split(',');
+                        int val1_FNum = int.Parse(splitStr_FNum[0]);
+                        int val2_FNum = int.Parse(splitStr_FNum[1]);
+                        meta.ExifFNumber = val1_FNum / val2_FNum;
+                        break;
+                    case 0x8822:
+                        meta.ExifExposureProg = short.Parse(value);
+                        break;
+                    case 0x8827:
+                        meta.ExifISOSpeed = short.Parse(value);
+                        break;
+                    case 0x9003:
+                        meta.ExifDTOrig = value;
+                        break;
+                    case 0x9004:
+                        meta.ExifDTDigitized = value;
+                        break;
+                    case 0x9201:
+                        string[] splitStr_ShutSpd = value.Split(',');
+                        int val1_ShutSpd = int.Parse(splitStr_ShutSpd[0]);
+                        int val2_ShutSpd = int.Parse(splitStr_ShutSpd[1]);
+                        meta.ExifShutterSpeed = val1_ShutSpd / val2_ShutSpd;
+                        break;
+                    case 0x9202:
+                        string[] splitStr_Apt = value.Split(',');
+                        int val1_Apt = int.Parse(splitStr_Apt[0]);
+                        int val2_Apt = int.Parse(splitStr_Apt[1]);
+                        meta.ExifAperture = val1_Apt / val2_Apt;
+                        break;
+                    case 0x9203:
+                        string[] splitStr_Bright = value.Split(',');
+                        int val1_Bright = int.Parse(splitStr_Bright[0]);
+                        int val2_Bright = int.Parse(splitStr_Bright[1]);
+                        meta.ExifBrigthness = val1_Bright / val2_Bright;
+                        break;
+                    case 0x9204:
+                        string[] splitStr_ExpBias = value.Split(',');
+                        int val1_ExpBias = int.Parse(splitStr_ExpBias[0]);
+                        int val2_ExpBias = int.Parse(splitStr_ExpBias[1]);
+                        meta.ExifExposureBias = val1_ExpBias / val2_ExpBias;
+                        break;
+                    case 0x9205:
+                        string[] splitStr_MaxApt = value.Split(',');
+                        int val1_MaxApt = int.Parse(splitStr_MaxApt[0]);
+                        int val2_MaxApt = int.Parse(splitStr_MaxApt[1]);
+                        meta.ExifMaxAperture = val1_MaxApt / val2_MaxApt;
+                        break;
+                    case 0x9207:
+                        meta.ExifMeteringMode = short.Parse(value);
+                        break;
+                    case 0x9209:
+                        meta.ExifFlash = short.Parse(value);
+                        break;
+                    case 0x920a:
+                        string[] splitStr_Focal = value.Split(',');
+                        int val1_Focal = int.Parse(splitStr_Focal[0]);
+                        int val2_Focal = int.Parse(splitStr_Focal[1]);
+                        meta.ExifFocalLength = val1_Focal / val2_Focal;
+                        break;
+                    case 0x9290:
+                        meta.ExifDTSubsec = value;
+                        break;
+                    case 0x9291:
+                        meta.ExifDTOrigSS = value;
+                        break;
+                    case 0x9292:
+                        meta.ExifDTDigSS = value;
+                        break;
+                    case 0xa001:
+                        meta.ExifColorSpace = short.Parse(value);
+                        break;
+                    case 0xa002:
+                        meta.ExifPixXDim = long.Parse(value);
+                        break;
+                    case 0xa003:
+                        meta.ExifPixYDim = long.Parse(value);
+                        break;
+                    case 0x0001:
+                        meta.GpsLatitudeRef = value;
+                        break;
+                    case 0x0002:
+                        string[] splitStr_Lat = value.Split(',');
+                        int val1_Lat = int.Parse(splitStr_Lat[0]);
+                        int val2_Lat = int.Parse(splitStr_Lat[1]);
+                        float latDeg = val1_Lat / val2_Lat;
+
+                        int val3_lat = int.Parse(splitStr_Lat[2]);
+                        int val4_lat = int.Parse(splitStr_Lat[3]);
+                        float latMin = val3_lat / val4_lat;
+
+                        int val5_lat = int.Parse(splitStr_Lat[4]);
+                        int val6_lat = int.Parse(splitStr_Lat[5]);
+                        float latSec = val5_lat / val6_lat;
+
+                        meta.GpsLatitude = latDeg + (latMin / 60.0f) + (latSec / 3600.0f);
+                        break;
+                    case 0x0003:
+                        meta.GpsLongitudeRef = value;
+                        break;
+                    case 0x0004:
+                        string[] splitStr_Lon = value.Split(',');
+                        int val1_Lon = int.Parse(splitStr_Lon[0]);
+                        int val2_Lon = int.Parse(splitStr_Lon[1]);
+                        float lonDeg = val1_Lon / val2_Lon;
+
+                        int val3_lon = int.Parse(splitStr_Lon[2]);
+                        int val4_lon = int.Parse(splitStr_Lon[3]);
+                        float lonMin = val3_lon / val4_lon;
+
+                        int val5_lon = int.Parse(splitStr_Lon[4]);
+                        int val6_lon = int.Parse(splitStr_Lon[5]);
+                        float lonSec = val5_lon / val6_lon;
+
+                        meta.GpsLatitude = lonDeg + (lonMin / 60.0f) + (lonSec / 3600.0f);
+                        break;
+                    case 0x0006:
+                        string[] splitStr_Alt = value.Split(',');
+                        int val1_Alt = int.Parse(splitStr_Alt[0]);
+                        int val2_Alt = int.Parse(splitStr_Alt[1]);
+                        meta.GpsAltitude = val1_Alt / val2_Alt;
+                        break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.Out.WriteLine(ex);
+            }
+        }
+
+
+        const int BYTES = 1;
         const int ASCII = 2;
         const int SHORT = 3;
         const int LONG = 4;

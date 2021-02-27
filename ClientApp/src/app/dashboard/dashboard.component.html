@@ -17,9 +17,17 @@
 </div>
 
 <div class="item-wrapper">
-  <div class="item" *ngFor="let img of userImages" >
-    <a href="{{img.id}}">
-      <img class="usr-img-dash" src="{{img.s3ThumbPath}}" />
-    </a>
+  <div class="item" *ngFor="let img of userImages">
+    <div *ngIf="isPortrait(img)">
+        <a href="/image/{{img.id}}">
+          <img class="usr-img-dash-portrait rounded" src="{{img.s3ThumbPath}}" />
+        </a>
+    </div>
+    <div *ngIf="!isPortrait(img)">
+        <a href="/image/{{img.id}}">
+          <img class="usr-img-dash-landscape rounded" src="{{img.s3ThumbPath}}" />
+        </a>
+    </div>
+
   </div>
 </div>
