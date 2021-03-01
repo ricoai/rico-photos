@@ -1,10 +1,8 @@
 <div *ngIf="userImage">
-
   <div class="row">
     <div class="col-md-8">
       <img class="usr-img-details" src="{{userImage.s3Path}}" />
     </div>
-
     <div class="col-md-4">
       <ul class="list-group">
         <li class="list-group-item">Details</li>
@@ -85,29 +83,17 @@
             </div>
           </div>
         </li>
-        <li class="list-group-item">AI [Object Detection]</li>
-        <li class="list-group-item" *ngFor="let obj of userImage.aiObjectsTags.Labels">
-          <div class="row">
-            <div class="col-sm-2">
-              <div class="detail-text">
-                <span class="material-icons">saved_search</span>
-              </div>
-            </div>
-            <div class="col-sm-6">
-              <div class="row">
-                <div class="detail-text">
-                  {{obj.Name}}
-                </div>
-              </div>
-              <div class="row">
-                <div class="detail-text">
-                  {{obj.Confidence}}
-                </div>
-              </div>
-            </div>
-          </div>
-        </li>
       </ul>
   </div>
+  </div>
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card-columns">
+        <app-ai-object-details [objects]="userImage.aiObjectsTags.Labels"></app-ai-object-details>
+
+        <div *ngFor="let obj of userImage.aiFacialTags.FaceDetails">
+          <app-ai-facial-details [aiFacial]="obj" [s3Path]="userImage.s3Path"></app-ai-facial-details>
+      </div>
+    </div>
   </div>
 </div>

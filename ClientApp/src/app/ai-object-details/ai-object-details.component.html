@@ -1,0 +1,15 @@
+<div class="card">
+  <div class="card-body">
+    <div class="card-title">AI [Object Detection]</div>
+    <ul class="list-group">
+      <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let obj of objects">
+        <div class="ai-detail-text">
+          {{obj.Name}}
+        </div>
+        <div class="ai-detail-text">
+          <span class="badge badge-info badge-pill">{{obj.Confidence | number}}%</span>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
