@@ -28,6 +28,30 @@ rico.castelo@gmail.com
 I am in search of a new job.  My resume and profile can be found here: [https://www.linkedin.com/in/ecastelo/](https://www.linkedin.com/in/ecastelo/)
 
 
+# Installation
+* Check out the code.  
+* Right click on the project and select "Manager User Secrets" and copy the lines below.
+```json
+{
+  "aws-db": {
+    "connectionString": "Data Source=***.***.us-west-2.rds.amazonaws.com,1433; Initial Catalog=***; User ID=***; Password=***;"
+  },
+  "aws-cred": {
+    "id": "***",
+    "key": "***",
+    "photo-bucket": "***",
+  }
+}
+```
+Anywhere there is <code>***</code> enter in your AWS settings.
+
+You will need to create the permissions for your user to allow AWS S3 GET and PUT and AWS Reckongition.
+* In "Package Manager Console" send the command 
+```bash
+Add-Migration Init -Context RicoaiDbContext
+Update-Database -Context RicoaiDbContext
+```
+
 
 # Image Upload
 The image is uploaded to the server.  The server then verifies it is an image.  If the image is verified, it will continue processing.
