@@ -61,14 +61,14 @@ export class ImageDetailsComponent implements OnInit {
         console.log(this.userImage);
 
         // Get the latitude and longitude for the image
-        if (this.userImage.metaData.GpsLatitude != null) {
+        if (this.userImage.metaData.hasOwnProperty('GpsLatitude')) {
           this.lat = this.userImage.metaData.GpsLatitude;
           if (this.userImage.metaData.GpsLatitudeRef == "S") {
             this.lat *= -1;
           }
         }
 
-        if (this.userImage.metaData.GpsLongitude != null) {
+        if (this.userImage.metaData.hasOwnProperty('GpsLongitude')) {
           this.lng = this.userImage.metaData.GpsLongitude;
           if (this.userImage.metaData.GpsLongitudeRef == "W") {
             this.lng *= -1;

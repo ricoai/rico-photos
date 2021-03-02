@@ -13,7 +13,7 @@ export interface UserImage {
   fileType: string;
   fileSizeBytes: number;
   fileSizeStr: string;
-  metaData: string;
+  metaData: any;
   width: number;
   height: number;
   orientation: number;

@@ -40,7 +40,7 @@ import { AiObjectDetailsComponent } from './ai-object-details/ai-object-details.
     ]),
     BrowserAnimationsModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyBo6lv0GHvmssFRn6evybEK4SEAcITiGrk'
+      apiKey: 'AIzaSyD6dT9Qggh9piDbvw7Yayja4RyqOM8ubdM'
     }),
   ],
   providers: [
