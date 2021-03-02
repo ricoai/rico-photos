@@ -1,95 +1,98 @@
 <div class="card">
-  <img src="{{s3Path}}" class="card-img-top" alt="...">
-  <div class="card-body">
-    <h5 class="card-title">AI [Facial Details]</h5>
-    <ul class="list-group">
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        <div class="ai-detail-text">
-          {{aiFacial.Gender.Value.Value}}
-        </div>
-        <div class="ai-detail-text">
-          <span class="badge badge-info badge-pill">{{aiFacial.Gender.Confidence | number}}%</span>
-        </div>
-      </li>
-      <li class="list-group-item">
-        <div class="ai-detail-text">
-          Age {{aiFacial.AgeRange.Low}} to {{aiFacial.AgeRange.High}}
-        </div>
-      </li>
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        <div class="ai-detail-text">
-          <div *ngIf="aiFacial.Smile.Value==true">Smiling</div>
-          <div *ngIf="aiFacial.Smile.Value==false">Not Smiling</div>
-        </div>
-        <div class="ai-detail-text">
-          <span class="badge badge-info badge-pill">{{aiFacial.Smile.Confidence | number}}%</span>
-        </div>
-      </li>
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        <div class="ai-detail-text">
-          <div *ngIf="aiFacial.EyesOpen.Value==true">Eyes Open</div>
-          <div *ngIf="aiFacial.EyesOpen.Value==false">Eyes Closed</div>
-        </div>
-        <div class="ai-detail-text">
-          <span class="badge badge-info badge-pill">{{aiFacial.EyesOpen.Confidence | number}}%</span>
-        </div>
-      </li>
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        <div class="ai-detail-text">
-          <div *ngIf="aiFacial.MouthOpen.Value==true">Mouth Open</div>
-          <div *ngIf="aiFacial.MouthOpen.Value==false">Mouth Closed</div>
-        </div>
-        <div class="ai-detail-text">
-          <span class="badge badge-info badge-pill">{{aiFacial.MouthOpen.Confidence | number}}%</span>
-        </div>
-      </li>
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        <div class="ai-detail-text">
-          <div *ngIf="aiFacial.Eyeglasses.Value==true">Wearing Eyeglasses</div>
-          <div *ngIf="aiFacial.Eyeglasses.Value==false">Not Wearing Eyeglasses</div>
-        </div>
-        <div class="ai-detail-text">
-          <span class="badge badge-info badge-pill">{{aiFacial.Eyeglasses.Confidence | number}}%</span>
-        </div>
-      </li>
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        <div class="ai-detail-text">
-          <div *ngIf="aiFacial.Sunglasses.Value==true">Wearing Sunglasses</div>
-          <div *ngIf="aiFacial.Sunglasses.Value==false">Not Wearing Sunglasses</div>
-        </div>
-        <div class="ai-detail-text">
-          <span class="badge badge-info badge-pill">{{aiFacial.Sunglasses.Confidence | number}}%</span>
-        </div>
-      </li>
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        <div class="ai-detail-text">
-          <div *ngIf="aiFacial.Beard.Value==true">Beard</div>
-          <div *ngIf="aiFacial.Beard.Value==false">No Beard</div>
-        </div>
-        <div class="ai-detail-text">
-          <span class="badge badge-info badge-pill">{{aiFacial.Beard.Confidence | number}}%</span>
-        </div>
-      </li>
-      <li class="list-group-item d-flex justify-content-between align-items-center">
-        <div class="ai-detail-text">
-          <div *ngIf="aiFacial.Mustache.Value==true">Mustache</div>
-          <div *ngIf="aiFacial.Mustache.Value==false">No Mustache</div>
-        </div>
-        <div class="ai-detail-text">
-          <span class="badge badge-info badge-pill">{{aiFacial.Mustache.Confidence | number}}%</span>
-        </div>
-      </li>
-      <li class="list-group-item">Emotions</li>
-      <div *ngFor="let emotion of aiFacial.Emotions">
+  <div >
+    <canvas #boundingLayer id="boundingLayer"></canvas>
+  </div>
+    <div class="card-body">
+      <h5 class="card-title">AI [Facial Details]</h5>
+      <ul class="list-group">
         <li class="list-group-item d-flex justify-content-between align-items-center">
           <div class="ai-detail-text">
-            {{emotion.Type.Value}}
+            {{aiFacial.Gender.Value.Value}}
           </div>
           <div class="ai-detail-text">
-            <span class="badge badge-info badge-pill">{{emotion.Confidence | number}}%</span>
+            <span class="badge badge-info badge-pill">{{aiFacial.Gender.Confidence | number}}%</span>
           </div>
         </li>
-      </div>
-    </ul>
+        <li class="list-group-item">
+          <div class="ai-detail-text">
+            Age {{aiFacial.AgeRange.Low}} to {{aiFacial.AgeRange.High}}
+          </div>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <div class="ai-detail-text">
+            <div *ngIf="aiFacial.Smile.Value==true">Smiling</div>
+            <div *ngIf="aiFacial.Smile.Value==false">Not Smiling</div>
+          </div>
+          <div class="ai-detail-text">
+            <span class="badge badge-info badge-pill">{{aiFacial.Smile.Confidence | number}}%</span>
+          </div>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <div class="ai-detail-text">
+            <div *ngIf="aiFacial.EyesOpen.Value==true">Eyes Open</div>
+            <div *ngIf="aiFacial.EyesOpen.Value==false">Eyes Closed</div>
+          </div>
+          <div class="ai-detail-text">
+            <span class="badge badge-info badge-pill">{{aiFacial.EyesOpen.Confidence | number}}%</span>
+          </div>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <div class="ai-detail-text">
+            <div *ngIf="aiFacial.MouthOpen.Value==true">Mouth Open</div>
+            <div *ngIf="aiFacial.MouthOpen.Value==false">Mouth Closed</div>
+          </div>
+          <div class="ai-detail-text">
+            <span class="badge badge-info badge-pill">{{aiFacial.MouthOpen.Confidence | number}}%</span>
+          </div>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <div class="ai-detail-text">
+            <div *ngIf="aiFacial.Eyeglasses.Value==true">Wearing Eyeglasses</div>
+            <div *ngIf="aiFacial.Eyeglasses.Value==false">Not Wearing Eyeglasses</div>
+          </div>
+          <div class="ai-detail-text">
+            <span class="badge badge-info badge-pill">{{aiFacial.Eyeglasses.Confidence | number}}%</span>
+          </div>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <div class="ai-detail-text">
+            <div *ngIf="aiFacial.Sunglasses.Value==true">Wearing Sunglasses</div>
+            <div *ngIf="aiFacial.Sunglasses.Value==false">Not Wearing Sunglasses</div>
+          </div>
+          <div class="ai-detail-text">
+            <span class="badge badge-info badge-pill">{{aiFacial.Sunglasses.Confidence | number}}%</span>
+          </div>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <div class="ai-detail-text">
+            <div *ngIf="aiFacial.Beard.Value==true">Beard</div>
+            <div *ngIf="aiFacial.Beard.Value==false">No Beard</div>
+          </div>
+          <div class="ai-detail-text">
+            <span class="badge badge-info badge-pill">{{aiFacial.Beard.Confidence | number}}%</span>
+          </div>
+        </li>
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+          <div class="ai-detail-text">
+            <div *ngIf="aiFacial.Mustache.Value==true">Mustache</div>
+            <div *ngIf="aiFacial.Mustache.Value==false">No Mustache</div>
+          </div>
+          <div class="ai-detail-text">
+            <span class="badge badge-info badge-pill">{{aiFacial.Mustache.Confidence | number}}%</span>
+          </div>
+        </li>
+        <div *ngFor="let emotion of aiFacial.Emotions">
+          <div *ngIf="emotion.Confidence >= emotionConfidenceMin">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              <div class="ai-detail-text">
+                {{emotion.Type.Value}}
+              </div>
+              <div class="ai-detail-text">
+                <span class="badge badge-info badge-pill">{{emotion.Confidence | number}}%</span>
+              </div>
+            </li>
+          </div>
+        </div>
+      </ul>
+    </div>
   </div>
-</div>

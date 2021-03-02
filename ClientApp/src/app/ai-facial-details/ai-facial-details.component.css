@@ -13,3 +13,9 @@
   font-family: Roboto;
   color: darkgrey;
 }
+
+canvas {
+  background-color: blue;
+  width: 100%;
+  height: auto;
+}
