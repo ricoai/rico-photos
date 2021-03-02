@@ -15,7 +15,7 @@
             </div>
             <div class="col-sm-6">
               <div class="detail-text">
-                {{userImage.metaData.ExifDTOrig}}
+                {{userImage.metaData.ExifDTOrig | date:'full' }}
               </div>
             </div>
           </div>
@@ -86,7 +86,7 @@
     </div>
   </div>
 
-  <app-ai-object-details [objects]="userImage.aiObjectsTags.Labels"></app-ai-object-details>
+  <app-ai-object-details [objects]="userImage.aiObjectsTags.Labels" [s3Path]="userImage.s3ThumbPath"></app-ai-object-details>
 
   <div *ngFor="let obj of userImage.aiFacialTags.FaceDetails">
     <app-ai-facial-details [aiFacial]="obj" [s3Path]="userImage.s3ThumbPath"></app-ai-facial-details>

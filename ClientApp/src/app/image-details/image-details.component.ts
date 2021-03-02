@@ -38,7 +38,6 @@ export class ImageDetailsComponent implements OnInit {
     //  });
 
     this.getUserImage(imageId);
-
   }
 
   ngAfterViewInit() {
@@ -57,6 +56,11 @@ export class ImageDetailsComponent implements OnInit {
         this.userImage.aiModerationTags = JSON.parse(this.userImage.aiModerationTags);
         this.userImage.aiObjectsTags = JSON.parse(this.userImage.aiObjectsTags);
         this.userImage.aiTextInImageTags = JSON.parse(this.userImage.aiTextInImageTags);
+
+        // Validate the date time string
+        if (this.userImage.metaData.hasOwnProperty('ExifDTOrig')) {
+          this.userImage.metaData.ExifDTOrig = this.validDateFormat(this.userImage.metaData.ExifDTOrig);
+        }
 
         console.log(this.userImage);
 
@@ -78,4 +82,23 @@ export class ImageDetailsComponent implements OnInit {
       });
   }
 
+  // Fix the date time string
+  // There is a space between the date and time and angular wants a T.
+  // The date needs '-' and not ':' seperating them.
+  validDateFormat(dateString) {
+    if (dateString) {
+      //dateString = dateString.replace(/\s/, 'T');
+
+      // Replace : with - in the date
+      // /: says to replace ':'
+      // /g says to replace all occurances
+      var date = dateString.substring(0,10).replace(/:/g, '-');
+      var time = dateString.substring(11, 20);
+
+      return date + "T" + time;
+    }
+
+    return null;
+
+  }
 }
