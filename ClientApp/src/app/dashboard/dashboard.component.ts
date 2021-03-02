@@ -56,9 +56,12 @@ export class DashboardComponent implements OnInit {
   }
 
 
-  onFileSelected(event) {
+  async onFileSelected(event) {
     console.log(event);
     this.selectedFiles = <File[]>event.target.files;
+
+    // Upload the file selected
+    await this.onUpload();
   }
 
   async onUpload() {

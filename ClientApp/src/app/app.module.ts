@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
-
+import { AgmCoreModule } from '@agm/core';
 import { AppComponent } from './app.component';
 import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
@@ -25,7 +25,7 @@ import { AiObjectDetailsComponent } from './ai-object-details/ai-object-details.
     DashboardComponent,
     ImageDetailsComponent,
     AiFacialDetailsComponent,
-    AiObjectDetailsComponent
+    AiObjectDetailsComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -38,7 +38,10 @@ import { AiObjectDetailsComponent } from './ai-object-details/ai-object-details.
       { path: 'dashboard', component: DashboardComponent, canActivate: [AuthorizeGuard] },
       { path: 'image/:id', component: ImageDetailsComponent, canActivate: [AuthorizeGuard] },
     ]),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    AgmCoreModule.forRoot({
+      apiKey: 'AIzaSyBo6lv0GHvmssFRn6evybEK4SEAcITiGrk'
+    }),
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: AuthorizeInterceptor, multi: true }

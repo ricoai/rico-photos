@@ -1,9 +1,9 @@
 <div *ngIf="userImage">
-  <div class="row">
-    <div class="col-md-8">
-      <img class="usr-img-details" src="{{userImage.s3Path}}" />
+  <div class="row no-gutters bg-light position-relative">
+    <div class="col-md-8 mb-md-0 p-md-4">
+      <img class="usr-img-details w-100" src="{{userImage.s3ThumbPath}}" />
     </div>
-    <div class="col-md-4">
+    <div class="col-md-4 position-static p-4 pl-md-0">
       <ul class="list-group">
         <li class="list-group-item">Details</li>
         <li class="list-group-item">
@@ -74,26 +74,25 @@
                 <div class="detail-text">
                   {{userImage.metaData.GpsLatitude}} {{userImage.metaData.GpsLatitudeRef}}, {{userImage.metaData.GpsLongitude}} {{userImage.metaData.GpsLongitudeRef}}
                 </div>
-              </div>
-              <div class="row">
-                <div class="detail-text">
-
-                </div>
-              </div>
+                <br />
+                <agm-map [latitude]="lat" [longitude]="lng" [mapTypeId]="mapType" [zoom]="zoomLevel">
+                  <agm-marker [latitude]="lat" [longitude]="lng" ></agm-marker>
+                </agm-map>
+              </div>              
             </div>
           </div>
         </li>
       </ul>
+    </div>
   </div>
-  </div>
-  <div class="row">
-    <div class="col-md-12">
+  <div class="row no-gutters bg-light position-relative">
+    <div class="col-md-12  position-static p-4 pl-md-0">
       <div class="card-columns">
         <app-ai-object-details [objects]="userImage.aiObjectsTags.Labels"></app-ai-object-details>
 
         <div *ngFor="let obj of userImage.aiFacialTags.FaceDetails">
           <app-ai-facial-details [aiFacial]="obj" [s3Path]="userImage.s3ThumbPath"></app-ai-facial-details>
+        </div>
       </div>
     </div>
   </div>
-</div>

@@ -14,3 +14,7 @@
   color: darkgrey;
 }
 
+agm-map {
+  width: 250px;
+  height: 250px;
+}

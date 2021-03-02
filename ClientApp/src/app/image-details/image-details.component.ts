@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { UserImage } from "../user-image";
 import { UserImageService } from '../user-image.service';
 
+
 @Component({
   selector: 'app-image-details',
   templateUrl: './image-details.component.html',
@@ -16,6 +17,12 @@ export class ImageDetailsComponent implements OnInit {
   //@Input() userImage: UserImage;
 
   userImage: UserImage;
+
+  lat = 32.73172;
+  lng = -117.15168;
+  mapType = 'satellite';
+  //mapType = "roadmap";
+  zoomLevel = 16;
 
   constructor(private route: ActivatedRoute, private userImageService: UserImageService) { }
 
@@ -34,6 +41,10 @@ export class ImageDetailsComponent implements OnInit {
 
   }
 
+  ngAfterViewInit() {
+
+  }
+
   getUserImage(imageId) {
     this.userImageService.getUserImage(imageId)
       .subscribe(result => {
@@ -48,6 +59,22 @@ export class ImageDetailsComponent implements OnInit {
         this.userImage.aiTextInImageTags = JSON.parse(this.userImage.aiTextInImageTags);
 
         console.log(this.userImage);
+
+        // Get the latitude and longitude for the image
+        if (this.userImage.metaData.GpsLatitude != null) {
+          this.lat = this.userImage.metaData.GpsLatitude;
+          if (this.userImage.metaData.GpsLatitudeRef == "S") {
+            this.lat *= -1;
+          }
+        }
+
+        if (this.userImage.metaData.GpsLongitude != null) {
+          this.lng = this.userImage.metaData.GpsLongitude;
+          if (this.userImage.metaData.GpsLongitudeRef == "W") {
+            this.lng *= -1;
+          }
+        }
+
       });
   }
 

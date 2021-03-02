@@ -1,33 +1,37 @@
-<p>dashboard works!</p>
-<p>Hello {{ userName | async }}</p>
-<p>{{userId}}</p>
 
 
-<div class="card">
-  <div class="card-title">Upload File</div>
 
-  <div class="card-body">
-    <ngb-progressbar type="info" [value]="progress" [striped]="true" [showValue]="true"></ngb-progressbar>
+<div class="jumbotron">
+  <div class="row">
+    <div class="col-md-8">
+      <p><strong>User: </strong> {{ userName | async }}</p>
+      <p><strong>User ID: </strong>{{userId}}</p>
+    </div>
+    <div class="col-md-4">
+      <div class="card">
+        <div class="card-body">
+          <div class="card-title">Upload File</div>
+          <ngb-progressbar type="info" [value]="progress" [striped]="true" [showValue]="true"></ngb-progressbar>
 
-    <input type="file" (change)="onFileSelected($event)">
-    <div class="card-actions">
-      <button type="button" (click)="onUpload()">UPLOAD</button>
+          <input type="file" (change)="onFileSelected($event)">
+        </div>
+      </div>
     </div>
   </div>
 </div>
 
-<div class="item-wrapper">
-  <div class="item" *ngFor="let img of userImages">
-    <div *ngIf="isPortrait(img)">
+  <div class="item-wrapper">
+    <div class="item" *ngFor="let img of userImages">
+      <div *ngIf="isPortrait(img)">
         <a href="/image/{{img.id}}">
           <img class="usr-img-dash-portrait rounded" src="{{img.s3ThumbPath}}" />
         </a>
-    </div>
-    <div *ngIf="!isPortrait(img)">
+      </div>
+      <div *ngIf="!isPortrait(img)">
         <a href="/image/{{img.id}}">
           <img class="usr-img-dash-landscape rounded" src="{{img.s3ThumbPath}}" />
         </a>
-    </div>
+      </div>
 
+    </div>
   </div>
-</div>
