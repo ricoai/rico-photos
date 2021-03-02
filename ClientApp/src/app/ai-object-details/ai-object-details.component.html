@@ -1,15 +1,19 @@
-<div class="card">
-  <div class="card-body">
-    <div class="card-title">AI [Object Detection]</div>
-    <ul class="list-group">
-      <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let obj of objects">
-        <div class="ai-detail-text">
-          {{obj.Name}}
-        </div>
-        <div class="ai-detail-text">
-          <span class="badge badge-info badge-pill">{{obj.Confidence | number}}%</span>
-        </div>
-      </li>
-    </ul>
+<div class="row top-buffer no-gutters bg-gray position-relative">
+  <div class="col-md-4 mb-md-0 p-md-4">
   </div>
-</div>
+  <div class="col-md-8 position-static p-4 pl-md-0">
+    <div class="card-body">
+      <h5 class="card-title ai-title-text"><span class="material-icons">select_all</span> AI [Object Detection]</h5>
+      <ul class="list-group">
+        <li class="list-group-item d-flex justify-content-between align-items-center" *ngFor="let obj of objects">
+          <div class="ai-detail-text">
+            {{obj.Name}}
+          </div>
+          <div class="ai-detail-text">
+            <span class="badge badge-info badge-pill">{{obj.Confidence | number}}%</span>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+ </div>

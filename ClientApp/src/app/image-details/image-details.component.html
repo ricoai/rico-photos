@@ -1,11 +1,11 @@
 <div *ngIf="userImage">
-  <div class="row no-gutters bg-light position-relative">
+  <div class="row no-gutters bg-gray position-relative">
     <div class="col-md-8 mb-md-0 p-md-4">
       <img class="usr-img-details w-100" src="{{userImage.s3ThumbPath}}" />
     </div>
     <div class="col-md-4 position-static p-4 pl-md-0">
       <ul class="list-group">
-        <li class="list-group-item">Details</li>
+        <li class="list-group-item ai-title-text">Details</li>
         <li class="list-group-item">
           <div class="row">
             <div class="col-sm-2">
@@ -85,17 +85,13 @@
       </ul>
     </div>
   </div>
-  <div class="row no-gutters bg-light position-relative">
-    <div class="col-md-12  position-static p-4 pl-md-0">
-      <div class="card-columns">
-        <app-ai-object-details [objects]="userImage.aiObjectsTags.Labels"></app-ai-object-details>
 
-        <div *ngFor="let obj of userImage.aiFacialTags.FaceDetails">
-          <app-ai-facial-details [aiFacial]="obj" [s3Path]="userImage.s3ThumbPath"></app-ai-facial-details>
-        </div>
-      </div>
-    </div>
+  <app-ai-object-details [objects]="userImage.aiObjectsTags.Labels"></app-ai-object-details>
+
+  <div *ngFor="let obj of userImage.aiFacialTags.FaceDetails">
+    <app-ai-facial-details [aiFacial]="obj" [s3Path]="userImage.s3ThumbPath"></app-ai-facial-details>
   </div>
+
   <div *ngFor="let text of userImage.aiTextInImageTags.TextDetections">
     <div *ngIf="text.Type.Value == 'LINE'">
       <app-ai-text-details [aiText]="text" [s3Path]="userImage.s3ThumbPath"></app-ai-text-details>

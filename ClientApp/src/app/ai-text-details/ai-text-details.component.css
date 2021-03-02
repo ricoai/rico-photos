@@ -14,8 +14,21 @@
   color: darkgrey;
 }
 
+.ai-title-text {
+  font-family: Roboto;
+  color: slategrey;
+}
+
 canvas {
   background-color: grey;
   width: 100%;
   height: auto;
+}
+
+.top-buffer {
+  margin-top: 20px;
+}
+
+.bg-gray {
+  background-color: #ebf0f9;
 }

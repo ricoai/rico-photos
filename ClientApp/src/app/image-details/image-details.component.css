@@ -14,7 +14,21 @@
   color: darkgrey;
 }
 
+.ai-title-text {
+  font-family: Roboto;
+  color: slategrey;
+}
+
 agm-map {
   width: 250px;
   height: 250px;
+}
+
+
+.bg-gray {
+  background-color: #ebf0f9;
+}
+
+.rounded {
+  border-radius: .25rem !important
 }
