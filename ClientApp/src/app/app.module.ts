@@ -16,6 +16,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ImageDetailsComponent } from './image-details/image-details.component';
 import { AiFacialDetailsComponent } from './ai-facial-details/ai-facial-details.component';
 import { AiObjectDetailsComponent } from './ai-object-details/ai-object-details.component';
+import { AiTextDetailsComponent } from './ai-text-details/ai-text-details.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +27,7 @@ import { AiObjectDetailsComponent } from './ai-object-details/ai-object-details.
     ImageDetailsComponent,
     AiFacialDetailsComponent,
     AiObjectDetailsComponent,
+    AiTextDetailsComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),

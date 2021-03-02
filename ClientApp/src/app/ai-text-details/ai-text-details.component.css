@@ -1,0 +1,21 @@
+.usr-img-details {
+  max-width: 100%;
+}
+
+.detail-text {
+  font-size: 10px;
+  font-family: Roboto;
+  color: darkgrey;
+}
+
+.ai-detail-text {
+  font-size: 12px;
+  font-family: Roboto;
+  color: darkgrey;
+}
+
+canvas {
+  background-color: grey;
+  width: 100%;
+  height: auto;
+}

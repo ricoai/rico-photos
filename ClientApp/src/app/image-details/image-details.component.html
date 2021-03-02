@@ -76,9 +76,9 @@
                 </div>
                 <br />
                 <agm-map [latitude]="lat" [longitude]="lng" [mapTypeId]="mapType" [zoom]="zoomLevel">
-                  <agm-marker [latitude]="lat" [longitude]="lng" ></agm-marker>
+                  <agm-marker [latitude]="lat" [longitude]="lng"></agm-marker>
                 </agm-map>
-              </div>              
+              </div>
             </div>
           </div>
         </li>
@@ -94,5 +94,10 @@
           <app-ai-facial-details [aiFacial]="obj" [s3Path]="userImage.s3ThumbPath"></app-ai-facial-details>
         </div>
       </div>
+    </div>
+  </div>
+  <div *ngFor="let text of userImage.aiTextInImageTags.TextDetections">
+    <div *ngIf="text.Type.Value == 'LINE'">
+      <app-ai-text-details [aiText]="text" [s3Path]="userImage.s3ThumbPath"></app-ai-text-details>
     </div>
   </div>
