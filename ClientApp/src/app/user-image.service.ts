@@ -18,7 +18,7 @@ export class UserImageService {
 
 
   // Get the User Images
-  getUserImages() {
+  getUserImages(userId: string) {
 
     //var userImages: any = [];
 
@@ -39,7 +39,7 @@ export class UserImageService {
       */
 
     // Use the API to get the user images
-    return this.http.get(this.baseUrl + 'api/UserImages');
+    return this.http.get(this.baseUrl + 'api/UserImages/user/' + userId);
 
     //return userImages;
   }

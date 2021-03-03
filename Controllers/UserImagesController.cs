@@ -32,6 +32,18 @@ namespace ricoai
             _configuration = configuration;
         }
 
+        /// <summary>
+        /// Get all the images for the specific UserID given.
+        /// </summary>
+        /// <param name="userId">UserID.</param>
+        /// <returns>List of all the images for the given user.</returns>
+        //[Route("api/images/{userId}")]
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<IEnumerable<UserImage>>> GetAllUserImages(string userId)
+        {
+            return await _context.UserImage.Where(ui => ui.UserId == userId).ToArrayAsync<UserImage>();
+        }
+
         // GET: api/UserImages
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserImage>>> GetUserImage()

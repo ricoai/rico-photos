@@ -1,0 +1,92 @@
+@import url(https://fonts.googleapis.com/css?family=Lato:100,300,400|Playfair+Display:400,700,400italic|Libre+Baskerville:400,700,400italic|Muli:300,400|Open+Sans:400,300,700|Oswald:400,700|Raleway:400,100,300,700|Montserrat:400,700|Merriweather:400,300,300italic,400italic,700|Bree+Serif|Vollkorn:400italic,400,700|Abril+Fatface|Cardo:400,400italic);
+
+.carousel-control-prev-icon {
+  background-image: url('https://apufpel.com.br/assets/img/seta_prim.png')
+}
+
+.carousel-control-next-icon {
+  background-image: url('https://apufpel.com.br/assets/img/seta_ult.png')
+}
+
+.carousel-caption h1 {
+  font-family: Garamond;
+  font-size: 3em;
+  color: red !important;
+}
+/* Description text */
+.carousel-caption p {
+  font-family: Garamond;
+  font-size: 2em;
+  color: #3258A4 !important;
+}
+/* Description text */
+.carousel-caption h3 {
+  font-family: Roboto;
+  font-size: 2em;
+  color: #3258A4 !important;
+}
+/* Button text */
+.carousel-caption .btn {
+  font-family: Roboto;
+  font-size: 1em;
+  color: yellow;
+}
+
+section {
+  height: 220px;
+  padding: 3rem 0;
+  position: relative;
+  color: white;
+}
+
+.wrapper {
+  max-width: 53.33rem;
+  margin: 0 auto;
+  position: relative;
+  z-index: 10;
+  transform: translateY(-50%);
+  top: 50%;
+  text-align: center;
+}
+
+section:nth-of-type(1) {
+  background-color: #2A2C39;
+}
+
+section:nth-of-type(2) {
+  background-color: gray;
+}
+
+section:nth-of-type(3) {
+  background-color: dimgrey;
+}
+
+
+
+section:before {
+  content: attr(data-description);
+  font-size: 0.9rem;
+  font-family: 'oswald';
+  color: #fff;
+  position: absolute;
+  z-index: 20;
+  left: 2rem;
+  top: 2rem;
+}
+
+.color-emphasis-1 {
+  color: #FF4056
+}
+
+.montserrat {
+  font-family: 'Montserrat'
+}
+
+.mega {
+  font-size: 2rem; /* 72 / 18 = 4 */
+  margin-bottom: 0.4125rem;
+}
+
+.bold {
+  font-weight: 700;
+}

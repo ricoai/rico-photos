@@ -1,14 +1,115 @@
-<h1>Hello, world!</h1>
-<p>Welcome to your new single-page application, built with:</p>
-<ul>
-  <li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for cross-platform server-side code</li>
-  <li><a href='https://angular.io/'>Angular</a> and <a href='http://www.typescriptlang.org/'>TypeScript</a> for client-side code</li>
-  <li><a href='http://getbootstrap.com/'>Bootstrap</a> for layout and styling</li>
-</ul>
-<p>To help you get started, we've also set up:</p>
-<ul>
-  <li><strong>Client-side navigation</strong>. For example, click <em>Counter</em> then <em>Back</em> to return here.</li>
-  <li><strong>Angular CLI integration</strong>. In development mode, there's no need to run <code>ng serve</code>. It runs in the background automatically, so your client-side resources are dynamically built on demand and the page refreshes when you modify any file.</li>
-  <li><strong>Efficient production builds</strong>. In production mode, development-time features are disabled, and your <code>dotnet publish</code> configuration automatically invokes <code>ng build</code> to produce minified, ahead-of-time compiled JavaScript files.</li>
-</ul>
-<p>The <code>ClientApp</code> subdirectory is a standard Angular CLI application. If you open a command prompt in that directory, you can run any <code>ng</code> command (e.g., <code>ng test</code>), or use <code>npm</code> to install extra packages into it.</p>
+
+<div class="jumbotron ">
+  <div class="container">
+
+    <h1>rico<span style="color:#FF4056">.ai</span> Photos</h1>
+
+    <div class="lead">
+      The intent of this project is to upload a image, process the image using AI to determine the semantics of the image, then display all the details of the image.  Like an alternative to Google Photos but with more details.
+      <br />
+
+      <ngb-carousel *ngIf="images">
+        <ng-template ngbSlide>
+          <div class="picsum-img-wrapper">
+            <img [src]="images[0]" alt="Object Detection">
+          </div>
+        </ng-template>
+        <ng-template ngbSlide>
+          <div class="picsum-img-wrapper">
+            <img [src]="images[1]" alt="Facial Detection">
+          </div>
+        </ng-template>
+        <ng-template ngbSlide>
+          <div class="picsum-img-wrapper">
+            <img [src]="images[2]" alt="Dashboard">
+          </div>
+        </ng-template>
+        <ng-template ngbSlide>
+          <div class="picsum-img-wrapper">
+            <img [src]="images[3]" alt="Text Detection">
+          </div>
+        </ng-template>
+        <ng-template ngbSlide>
+          <div class="picsum-img-wrapper">
+            <img [src]="images[4]" alt="Text Detection">
+          </div>
+        </ng-template>
+      </ngb-carousel>
+
+      <hr class="my-4">
+      <h5>Getting Started</h5>
+      <p>
+        Create an account.  Then upload some images.  As the image is uploaded, it will be processed and appear on the dashboard.  Click on any of the images in the dashboard to see the AI results.
+        <br />
+        <br />
+        A demo user has been created.
+        <br />
+        <strong>User Name:</strong> ricoai@mail.com
+        <br />
+        <strong>Password: </strong> rico_A!_d3m0
+      </p>
+    </div>
+
+    <hr class="my-4">
+
+    <h5>How?</h5>
+    A user logs in and uploads images to the site.
+    <br />
+    <br />
+    User information is stored in an <a href="https://www.microsoft.com/en-us/sql-server" target="_blank">Microsoft SQL Server</a> hosted on <a href="https://aws.amazon.com/rds/" target="_blank">AWS RDS</a>.  The SQL Server keeps track of all the AI results and the S3 paths for each image.
+    <br />
+    <br />
+    The original images and thumbnails are stored in an <a href="https://aws.amazon.com/s3/" target="_blank">AWS S3</a> Bucket.  Each user has there own folder.
+    <br />
+    <br />
+    The image is then processed by <a href="https://aws.amazon.com/rekognition/" target="_blank">AWS Rekognition</a> to determine the semantics of the image.
+    <ul>
+      <li>Determine if there are any objects in the images. (Object Detection)</li>
+      <li>Determine if there are any faces and the there facial expressions. (Facial Expressions and Sediment)</li>
+      <li>Determine if there are any sexual content. (Moderation)</li>
+      <li>Determine if there is any text.  (Text Detection)</li>
+    </ul>
+
+    Meta data of the image is obtained to determine information like location where the image was taken, the settings and camera type.
+    <br />
+    <br />
+    The Frontend uses <a href="https://angular.io/" target="_blank">Angular</a> to upload and display the images.  The uploaded images are displayed in a grid of thumbnails.  Each thumbnail can be clicked to see all the AI results of the image, including the bounding boxes.
+    <br />
+    <br />
+    The Backend uses <a href="https://www.asp.net/" target="_blank">ASP.net</a> MVC to load the SPA site and respond to API calls.  It uses <a href="https://docs.microsoft.com/en-us/ef/" target="_blank">EntityFramework</a> to load data to the MS SQL server and maintain the database schema.
+    <br />
+    <br />
+    The SQL Server keeps track of all the AI results and the S3 paths for each image.
+    <br />
+    <br />
+    Source code for this project can be found on my <a href="https://github.com/ricoai/rico-photos" target="_blank"><i class="bi bi-github"></i> Github</a>.
+    <br />
+    I chose the Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.  Hire me if you want similar code.
+  </div>
+
+</div>
+
+<section data-description="Who am I?">
+  <div class="wrapper">
+    <h1 class="mega montserrat bold">
+      Rico <span class="color-emphasis-1">Castelo</span><br>
+      I am in search of a new <span class="color-emphasis-1">job.</span><br />
+      Contact me through <span class="color-emphasis-1"><a href="https://www.linkedin.com/in/ecastelo/" target="_blank" style="color: #FF4056;"><i class="bi bi-linkedin"></i> LinkedIn</a></span>
+    </h1>
+  </div>
+</section>
+
+<section data-description="Privacy Notice">
+  <div class="wrapper">
+    <p>
+      Just to be clear.  If you upload an image to the site, I WILL OWN THE IMAGE and you are giving <strong>rico.ai</strong> all the rights to use the image in any manner.  By clicking upload, you are giving <strong>rico.ai</strong> all rights to use and distribute the images.  Your information could be sold, I have no clue what I am doing with this information right now, but its better I put this here to protect myself.<br />ALL YOUR BASE ARE BELONG TO ME.
+    </p>
+  </div>
+</section>
+
+<section data-description="License">
+  <div class="wrapper">
+    <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/"><img alt="Creative Commons License" style="border-width:0" src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png" /></a>
+    <br />This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" style="color: #FF4056;">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License</a>
+  </div>
+</section>

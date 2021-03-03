@@ -46,11 +46,14 @@ export class DashboardComponent implements OnInit {
     this.userName = this.authorizeService.getUser().pipe(map(u => u && u.name));
     this.user = this.authorizeService.getUser();
     //this.accessToken = this.authorizeService.getAccessToken();
-    this.authorizeService.getUserId().subscribe(val => this.userId = val);
+     this.authorizeService.getUserId().subscribe(val => {
+       this.userId = val;
+       this.getUserImages(this.userId);
+     });
     //this.userProfile = this.authorizeService.getUserProfile();
 
      //this.http.get(this.baseUrl + 'api/UserImages').subscribe(result => { console.log(result); this.userImages = result; });
-     this.getUserImages();
+     //this.getUserImages(this.userId);
     //this.userImages = await this.userImageService.getUserImages();
     this.progress = 0;
   }
@@ -88,7 +91,7 @@ export class DashboardComponent implements OnInit {
       // Wait for the response
       if (event.type == HttpEventType.Response) {
         // Get the latest images uploaded
-        this.getUserImages();
+        this.getUserImages(this.userId);
 
         console.log(event);
 
@@ -103,8 +106,8 @@ export class DashboardComponent implements OnInit {
     this.router.navigate(['/image', img.id]);
   }
 
-  getUserImages() {
-    this.userImageService.getUserImages().subscribe(result => {
+  getUserImages(userId: string) {
+    this.userImageService.getUserImages(userId).subscribe(result => {
       this.userImages = result
 
       // Convert the JSON strings to JSON
