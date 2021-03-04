@@ -1,12 +1,11 @@
 {
   "dependencies": {
-    "mssql1": {
-      "type": "mssql",
-      "connectionId": "DefaultConnection"
+    "secrets1": {
+      "type": "secrets"
     },
-    "mssql2": {
+    "mssql3": {
       "type": "mssql",
-      "connectionId": "RicoaiDbContext"
+      "connectionId": "aws-db:connectionString"
     }
   }
 }

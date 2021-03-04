@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "mssql3": {
+      "type": "mssql.onprem",
+      "connectionId": "aws-db:connectionString",
+      "secretStore": "AzureAppSettings"
+    },
+    "mssql1": {
+      "type": "mssql",
+      "connectionId": "DefaultConnection",
+      "suggestion": "true",
+      "ignored": "true"
+    },
+    "mssql2": {
+      "type": "mssql",
+      "connectionId": "RicoaiDbContext",
+      "suggestion": "true",
+      "ignored": "true"
+    }
+  }
+}

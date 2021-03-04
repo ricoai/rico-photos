@@ -3,6 +3,8 @@ This is a demo site to show my experience working with ASP.net, Angular and AWS.
 
 The intent of this project is to upload a image.  Process the image using AI determine the semantics of the image.  Display all the details of the image.
 
+![rico.ai Photos Example](https://ricoai-demo.s3-us-west-2.amazonaws.com/web/rico-ai-photo-ad.gif)
+
 # What does this do
 User information is stored in an SQL Server hosted on AWS RDS.
 
