@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -9,8 +10,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using ricoai.Data;
 using ricoai.Models;
+using System.IO;
+using System.Net;
+using System.Security.Cryptography.X509Certificates;
 
 namespace ricoai
 {
@@ -22,14 +27,11 @@ namespace ricoai
         }
 
         public IConfiguration Configuration { get; }
+        public IIdentityServerBuilder identityBuilder;
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContext<ApplicationDbContext>(options =>
-            //    options.UseSqlServer(
-            //        Configuration.GetConnectionString("DefaultConnection")));
-
             // Configuration stored in secrets.json
             services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(Configuration["aws-db:connectionString"]));
 
@@ -38,11 +40,13 @@ namespace ricoai
             services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
-            services.AddIdentityServer()
+            // Setup the Identity server
+            identityBuilder = services.AddIdentityServer()
                 .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
 
             services.AddAuthentication()
                 .AddIdentityServerJwt();
+
             services.AddControllersWithViews();
             services.AddRazorPages();
             // In production, the Angular files will be served from this directory
@@ -64,6 +68,8 @@ namespace ricoai
             {
                 app.UseDeveloperExceptionPage();
                 app.UseMigrationsEndPoint();
+
+                //identityBuilder.AddDeveloperSigningCredential();
             }
             else
             {

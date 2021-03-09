@@ -16,6 +16,12 @@
       "connectionId": "RicoaiDbContext",
       "suggestion": "true",
       "ignored": "true"
+    },
+    "mssql4": {
+      "resourceId": null,
+      "type": "mssql.onprem",
+      "connectionId": "VaultUri",
+      "secretStore": "AzureAppSettings"
     }
   }
 }

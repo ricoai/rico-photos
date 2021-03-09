@@ -16,8 +16,21 @@ export class UserImageService {
     this.baseUrl = baseUrl;
   }
 
+  // *****************************************
+  // Test if we can get any data from the database.
+  // This will retun the last 10 images if successful.
+  // :return: Last 10 images uploaded.
+  // *****************************************
+  testDbConnection() {
+    return this.http.get(this.baseUrl + 'api/UserImages/');
+  }
 
-  // Get the User Images
+  // *****************************************
+  // Get the User Images based on the UserId.
+  // This is all the images uploaded from a specific user.
+  // :param userId: User ID.
+  // :return: All the images for the specific User.
+  // *****************************************
   getUserImages(userId: string) {
 
     //var userImages: any = [];
@@ -44,6 +57,11 @@ export class UserImageService {
     //return userImages;
   }
 
+  // *****************************************
+  // Return a specific image.  This will return the image for the given id.
+  // :param id: ID for the image.
+  // :return: The image for the given id.
+  // *****************************************
   getUserImage(id: string) {
     return this.http.get(this.baseUrl + 'api/UserImages/' + id)
   }

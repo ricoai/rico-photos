@@ -44,11 +44,17 @@ namespace ricoai
             return await _context.UserImage.Where(ui => ui.UserId == userId).ToArrayAsync<UserImage>();
         }
 
+        /// <summary>
+        /// This is more used to test the database connection.  It should return something sucessfully
+        /// which means a connection is made.
+        /// </summary>
+        /// <returns>Last 10 images.</returns>
         // GET: api/UserImages
         [HttpGet]
         public async Task<ActionResult<IEnumerable<UserImage>>> GetUserImage()
         {
-            return await _context.UserImage.ToListAsync();
+            // Return last 10 image.
+            return await _context.UserImage.Take(10).ToListAsync<UserImage>();
         }
 
         // GET: api/UserImages/5

@@ -229,3 +229,8 @@ _Pvt_Extensions
 
 # FAKE - F# Make
 .fake/
+
+cert.pfx
+ricoai.pfx
+ricoaicert.pfx
+

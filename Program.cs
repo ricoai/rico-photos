@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Azure.Identity;
 
 namespace ricoai
 {
@@ -17,10 +18,21 @@ namespace ricoai
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
+            //Host.CreateDefaultBuilder(args)
+            //    .ConfigureWebHostDefaults(webBuilder =>
+            //    {
+            //        webBuilder.UseStartup<Startup>();
+            //    });
             Host.CreateDefaultBuilder(args)
-                .ConfigureWebHostDefaults(webBuilder =>
-                {
-                    webBuilder.UseStartup<Startup>();
-                });
+            .ConfigureAppConfiguration((context, config) =>
+            {
+
+                var root = config.Build();
+                config.AddAzureKeyVault($"https://{root["KeyVault:Vault"]}.vault.azure.net/", root["KeyVault:ClientId"], root["KeyVault:ClientSecret"]);
+            })
+            .ConfigureWebHostDefaults(webBuilder =>
+            {
+                webBuilder.UseStartup<Startup>();
+            });
     }
 }

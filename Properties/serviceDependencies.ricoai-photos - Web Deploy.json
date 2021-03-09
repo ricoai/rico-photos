@@ -1,0 +1,32 @@
+{
+  "dependencies": {
+    "mssql1": {
+      "type": "mssql",
+      "connectionId": "DefaultConnection",
+      "suggestion": "true",
+      "ignored": "true"
+    },
+    "secrets1": {
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.KeyVault/vaults/ricoai",
+      "type": "secrets.keyVault",
+      "connectionId": "VaultUri",
+      "secretStore": null
+    },
+    "mssql3": {
+      "type": "mssql.onprem",
+      "connectionId": "aws-db:connectionString",
+      "secretStore": "AzureKeyVault"
+    },
+    "mssql4": {
+      "type": "mssql.onprem",
+      "connectionId": "VaultUri",
+      "secretStore": "AzureKeyVault"
+    },
+    "mssql2": {
+      "type": "mssql",
+      "connectionId": "RicoaiDbContext",
+      "suggestion": "true",
+      "ignored": "true"
+    }
+  }
+}
