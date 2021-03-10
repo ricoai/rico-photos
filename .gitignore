@@ -234,3 +234,7 @@ cert.pfx
 ricoai.pfx
 ricoaicert.pfx
 
+/aws-beanstalk-tools-defaults.json
+/tempkey.jwk
+/appsettings.Development.json
+/appsettings.json

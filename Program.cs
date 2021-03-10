@@ -28,7 +28,15 @@ namespace ricoai
             {
 
                 var root = config.Build();
-                config.AddAzureKeyVault($"https://{root["KeyVault:Vault"]}.vault.azure.net/", root["KeyVault:ClientId"], root["KeyVault:ClientSecret"]);
+                // Verfiy if the key exist.  Only in production environment 
+                // These key values should be set in the Azure Application Settings
+                // The production keys will be then be found in the Azure Key Vault
+                // In the appsetting.Development.json file contain the develpment key values
+                if (root.GetChildren().Any(item => item.Key == "KeyVault"))
+                {
+                    // Setup configuration values from the Azure Key Vault
+                    config.AddAzureKeyVault($"https://{root["KeyVault:Vault"]}.vault.azure.net/", root["KeyVault:ClientId"], root["KeyVault:ClientSecret"]);
+                }
             })
             .ConfigureWebHostDefaults(webBuilder =>
             {
