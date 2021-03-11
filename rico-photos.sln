@@ -5,14 +5,11 @@ VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "rico-photos", "rico-photos.csproj", "{723043E4-B40D-41E4-96DE-306098CE119F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rico-photos-unittest", "..\rico-photos-unittest\rico-photos-unittest.csproj", "{933A151B-8F7C-4432-8700-92B025AD2A72}"
-	ProjectSection(ProjectDependencies) = postProject
-		{723043E4-B40D-41E4-96DE-306098CE119F} = {723043E4-B40D-41E4-96DE-306098CE119F}
-	EndProjectSection
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C0737CED-2C4B-428C-BA72-976B3C1C4FA1}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{C4307587-5F24-4655-970A-F32FE3D848D2}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "rico-photos-unittest", "test\rico-photos-tests\rico-photos-unittest.csproj", "{7DF5B5A7-77F7-480F-AF32-8AA9D8AFC753}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -24,17 +21,17 @@ Global
 		{723043E4-B40D-41E4-96DE-306098CE119F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{723043E4-B40D-41E4-96DE-306098CE119F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{723043E4-B40D-41E4-96DE-306098CE119F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{933A151B-8F7C-4432-8700-92B025AD2A72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{933A151B-8F7C-4432-8700-92B025AD2A72}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{933A151B-8F7C-4432-8700-92B025AD2A72}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{933A151B-8F7C-4432-8700-92B025AD2A72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7DF5B5A7-77F7-480F-AF32-8AA9D8AFC753}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7DF5B5A7-77F7-480F-AF32-8AA9D8AFC753}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7DF5B5A7-77F7-480F-AF32-8AA9D8AFC753}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7DF5B5A7-77F7-480F-AF32-8AA9D8AFC753}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{723043E4-B40D-41E4-96DE-306098CE119F} = {C0737CED-2C4B-428C-BA72-976B3C1C4FA1}
-		{933A151B-8F7C-4432-8700-92B025AD2A72} = {C4307587-5F24-4655-970A-F32FE3D848D2}
+		{7DF5B5A7-77F7-480F-AF32-8AA9D8AFC753} = {C4307587-5F24-4655-970A-F32FE3D848D2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0AC7EC79-B06B-4648-A7E1-9CF48F17C52E}

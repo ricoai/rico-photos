@@ -1,0 +1,3 @@
+[submodule "test/rico-photos-tests"]
+	path = test/rico-photos-tests
+	url = https://github.com/ricoai/rico-photos-unittest
