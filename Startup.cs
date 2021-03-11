@@ -13,6 +13,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using ricoai.Data;
 using ricoai.Models;
+using ricoai.Repositories;
+using ricoai.Repositories.Interfaces;
 using System.IO;
 using System.Net;
 using System.Security.Cryptography.X509Certificates;
@@ -59,6 +61,7 @@ namespace ricoai
             // Configuration stored in secrets.json
             services.AddDbContext<RicoaiDbContext>(options =>
                     options.UseSqlServer(Configuration["aws-db:connectionString"]));
+            services.AddScoped<IUserImagesRepository, UserImagesRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

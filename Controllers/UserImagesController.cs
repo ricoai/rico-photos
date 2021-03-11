@@ -9,6 +9,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using ricoai.Data;
 using ricoai.Models;
+using ricoai.Repositories.Interfaces;
 
 namespace ricoai
 {
@@ -19,16 +20,19 @@ namespace ricoai
         /// <summary>
         /// Database connection
         /// </summary>
-        private readonly RicoaiDbContext _context;
+        //private readonly RicoaiDbContext _context;
 
         /// <summary>
         /// Configuration to get the AWS settings.
         /// </summary>
         private readonly IConfiguration _configuration;
 
-        public UserImagesController(RicoaiDbContext context, IConfiguration configuration)
+        private readonly IUserImagesRepository _userImageRepository;
+
+        public UserImagesController(IUserImagesRepository userImageRepo, IConfiguration configuration)
         {
-            _context = context;
+            //_context = context;
+            _userImageRepository = userImageRepo;
             _configuration = configuration;
         }
 
@@ -41,7 +45,8 @@ namespace ricoai
         [HttpGet("user/{userId}")]
         public async Task<ActionResult<IEnumerable<UserImage>>> GetAllUserImages(string userId)
         {
-            return await _context.UserImage.Where(ui => ui.UserId == userId).ToArrayAsync<UserImage>();
+            //return await _context.UserImage.Where(ui => ui.UserId == userId).ToArrayAsync<UserImage>();
+            return await _userImageRepository.GetAllUsersImage(userId);
         }
 
         /// <summary>
@@ -54,14 +59,15 @@ namespace ricoai
         public async Task<ActionResult<IEnumerable<UserImage>>> GetUserImage()
         {
             // Return last 10 image.
-            return await _context.UserImage.Take(10).ToListAsync<UserImage>();
+            //return await _context.UserImage.Take(10).ToListAsync<UserImage>();
+            return await _userImageRepository.GetLastTenPublic();
         }
 
         // GET: api/UserImages/5
         [HttpGet("{id}")]
         public async Task<ActionResult<UserImage>> GetUserImage(int id)
         {
-            var userImage = await _context.UserImage.FindAsync(id);
+            var userImage = await _userImageRepository.GetByIdAsync(id);
 
             if (userImage == null)
             {
@@ -71,36 +77,36 @@ namespace ricoai
             return userImage;
         }
 
-        // PUT: api/UserImages/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutUserImage(int id, UserImage userImage)
-        {
-            if (id != userImage.id)
-            {
-                return BadRequest();
-            }
+        //// PUT: api/UserImages/5
+        //// To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[HttpPut("{id}")]
+        //public async Task<IActionResult> PutUserImage(int id, UserImage userImage)
+        //{
+        //    if (id != userImage.id)
+        //    {
+        //        return BadRequest();
+        //    }
 
-            _context.Entry(userImage).State = EntityState.Modified;
+        //    _context.Entry(userImage).State = EntityState.Modified;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!UserImageExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+        //    try
+        //    {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!UserImageExists(id))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
 
-            return NoContent();
-        }
+        //    return NoContent();
+        //}
 
         // POST: api/UserImages
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -113,6 +119,11 @@ namespace ricoai
         //return CreatedAtAction("GetUserImage", new { id = userImage.id }, userImage);
         //}
 
+        /// <summary>
+        /// Upload a user Image.  The Form request must include "userId" to know
+        /// which user is adding an image.  Include a Form.File to upload.
+        /// </summary>
+        /// <returns></returns>
         // POST api/UserImages
         [HttpPost, DisableRequestSizeLimit]
         public async Task<ActionResult<UserImage>> UploadFile()
@@ -187,8 +198,9 @@ namespace ricoai
                         usrImage.FileSizeStr = imgDim.SizeStr;
 
 
-                        _context.UserImage.Add(usrImage);
-                        await _context.SaveChangesAsync();
+                        //_context.UserImage.Add(usrImage);
+                        //await _context.SaveChangesAsync();
+                        await _userImageRepository.InsertAsync(usrImage);
 
                         return CreatedAtAction("GetUserImage", new { id = usrImage.id }, usrImage);
                     }
@@ -207,21 +219,22 @@ namespace ricoai
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUserImage(int id)
         {
-            var userImage = await _context.UserImage.FindAsync(id);
-            if (userImage == null)
+            if(!await _userImageRepository.Remove(id))
             {
                 return NotFound();
             }
 
-            _context.UserImage.Remove(userImage);
-            await _context.SaveChangesAsync();
-
             return NoContent();
         }
 
+        /// <summary>
+        /// Determine if the user Image exist. 
+        /// </summary>
+        /// <param name="id">ID to check.</param>
+        /// <returns>TRUE if the image exist.</returns>
         private bool UserImageExists(int id)
         {
-            return _context.UserImage.Any(e => e.id == id);
+            return _userImageRepository.UserImageExist(id);
         }
     }
 }

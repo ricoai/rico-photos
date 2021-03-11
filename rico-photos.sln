@@ -5,6 +5,11 @@ VisualStudioVersion = 16.0.31005.135
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "rico-photos", "rico-photos.csproj", "{723043E4-B40D-41E4-96DE-306098CE119F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rico-photos-unittest", "..\rico-photos-unittest\rico-photos-unittest.csproj", "{933A151B-8F7C-4432-8700-92B025AD2A72}"
+	ProjectSection(ProjectDependencies) = postProject
+		{723043E4-B40D-41E4-96DE-306098CE119F} = {723043E4-B40D-41E4-96DE-306098CE119F}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +20,10 @@ Global
 		{723043E4-B40D-41E4-96DE-306098CE119F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{723043E4-B40D-41E4-96DE-306098CE119F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{723043E4-B40D-41E4-96DE-306098CE119F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{933A151B-8F7C-4432-8700-92B025AD2A72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{933A151B-8F7C-4432-8700-92B025AD2A72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{933A151B-8F7C-4432-8700-92B025AD2A72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{933A151B-8F7C-4432-8700-92B025AD2A72}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
