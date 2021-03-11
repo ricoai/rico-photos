@@ -34,7 +34,7 @@ namespace ricoai.Repositories.Interfaces
         /// </summary>
         /// <param name="userId">User Id.</param>
         /// <returns>List of all the user's Images.</returns>
-        Task<List<UserImage>> GetAllUsersImage(string userId);
+        Task<List<UserImage>> GetAllUsersImageAsync(string userId);
 
         /// <summary>
         /// Get the last 10 public images available.

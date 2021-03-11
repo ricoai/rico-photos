@@ -10,6 +10,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "rico-photos-unittest", "..\
 		{723043E4-B40D-41E4-96DE-306098CE119F} = {723043E4-B40D-41E4-96DE-306098CE119F}
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C0737CED-2C4B-428C-BA72-976B3C1C4FA1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{C4307587-5F24-4655-970A-F32FE3D848D2}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +31,10 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{723043E4-B40D-41E4-96DE-306098CE119F} = {C0737CED-2C4B-428C-BA72-976B3C1C4FA1}
+		{933A151B-8F7C-4432-8700-92B025AD2A72} = {C4307587-5F24-4655-970A-F32FE3D848D2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {0AC7EC79-B06B-4648-A7E1-9CF48F17C52E}

@@ -46,39 +46,48 @@ namespace ricoai.Repositories
             return _dbContext.UserImage.Any(e => e.id == id);
         }
 
+        /// <summary>
+        /// Find a specific user image given the expression.
+        /// Use AsNoTracking because nothing will be done data after given.
+        /// </summary>
+        /// <param name="expression">User the expression to filter the user images.</param>
+        /// <returns>List of user images based on the query.</returns>
         public IQueryable<UserImage> Find(Expression<Func<UserImage, bool>> expression)
         {
-            return this._dbContext.Set<UserImage>().AsNoTracking().Where(expression);
+            return this._dbContext.UserImage.AsNoTracking().Where(expression);
         }
 
         /// <summary>
         /// Get all the User images.
+        /// Use AsNoTracking because nothing will be done data after given.
         /// </summary>
         /// <returns>List of all the user images.</returns>
         public IQueryable<UserImage> Get()
         {
             // Return with no tracking
             // This return will not have the data modified here
-            return this._dbContext.Set<UserImage>().AsNoTracking();
+            return this._dbContext.UserImage.AsNoTracking();
         }
 
         /// <summary>
-        /// Get a user image given the ID.
+        /// Get all the user images based on the given userID.
+        /// Use AsNoTracking because nothing will be done data after given.
         /// </summary>
-        /// <param name="id">ID for the image.</param>
-        /// <returns>User image promise.</returns>
-        public Task<List<UserImage>> GetAllUsersImage(string userId)
+        /// <param name="id">UserID to search for all the images.</param>
+        /// <returns>A list of all the user user images based on the userID.</returns>
+        public async Task<List<UserImage>> GetAllUsersImageAsync(string userId)
         {
-            return _dbContext.Set<UserImage>().AsNoTracking().Where(ui => ui.UserId == userId).ToListAsync();
+            return await _dbContext.UserImage.AsNoTracking().Where(ui => ui.UserId == userId).ToListAsync();
         }
 
         /// <summary>
         /// Get the last 10 public images available.
+        /// Use AsNoTracking because nothing will be done data after given.
         /// </summary>
         /// <returns>List of the last 10 public images.</returns>
         public Task<List<UserImage>> GetLastTenPublic()
         {
-            return _dbContext.Set<UserImage>().AsNoTracking().Where(ui => ui.IsPublic == true).Take(10).ToListAsync();
+            return _dbContext.UserImage.AsNoTracking().Where(ui => ui.IsPublic == true).Take(10).ToListAsync();
         }
 
         /// <summary>
@@ -88,7 +97,7 @@ namespace ricoai.Repositories
         /// <returns>User image based on ID.</returns>
         public async Task<UserImage> GetByIdAsync(int id)
         {
-            return await _dbContext.Set<UserImage>().FindAsync(id);
+            return await _dbContext.UserImage.FindAsync(id);
         }
 
         /// <summary>
@@ -98,7 +107,7 @@ namespace ricoai.Repositories
         /// <returns></returns>
         public async Task<int> InsertAsync(UserImage item)
         {
-            _dbContext.Set<UserImage>().Add(item);
+            _dbContext.UserImage.Add(item);
             await _dbContext.SaveChangesAsync();
             return item.id;
         }
@@ -110,10 +119,10 @@ namespace ricoai.Repositories
         /// <returns>True if the image was removed.  False if the id did not exist.</returns>
         public async Task<bool> Remove(int id)
         {
-            var item = this._dbContext.Set<UserImage>().FirstOrDefault(e => e.id == id);
+            var item = this._dbContext.UserImage.FirstOrDefault(e => e.id == id);
             if (item != null)
             {
-                this._dbContext.Set<UserImage>().Remove(item);
+                this._dbContext.UserImage.Remove(item);
                 await this._dbContext.SaveChangesAsync();
                 return true;
             }

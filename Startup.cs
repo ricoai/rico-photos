@@ -61,6 +61,7 @@ namespace ricoai
             // Configuration stored in secrets.json
             services.AddDbContext<RicoaiDbContext>(options =>
                     options.UseSqlServer(Configuration["aws-db:connectionString"]));
+            //services.AddScoped<IRicoaiDbContext, RicoaiDbContext>();
             services.AddScoped<IUserImagesRepository, UserImagesRepository>();
         }
 

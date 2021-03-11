@@ -30,11 +30,13 @@ namespace ricoai.Models
         /// <summary>
         /// Date and time the image was created.
         /// </summary>
+        [DataType(DataType.DateTime)]
         public DateTime Create { get; set; }
 
         /// <summary>
         /// Date and Time the image was modified.
         /// </summary>
+        [DataType(DataType.DateTime)]
         public DateTime Modified { get; set; }
 
         /// <summary>

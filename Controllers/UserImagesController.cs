@@ -46,7 +46,7 @@ namespace ricoai
         public async Task<ActionResult<IEnumerable<UserImage>>> GetAllUserImages(string userId)
         {
             //return await _context.UserImage.Where(ui => ui.UserId == userId).ToArrayAsync<UserImage>();
-            return await _userImageRepository.GetAllUsersImage(userId);
+            return await _userImageRepository.GetAllUsersImageAsync(userId);
         }
 
         /// <summary>

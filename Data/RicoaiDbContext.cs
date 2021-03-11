@@ -9,11 +9,22 @@ namespace ricoai.Data
 {
     public class RicoaiDbContext : DbContext
     {
+        public RicoaiDbContext():base()
+        {
+
+        }
+
         public RicoaiDbContext (DbContextOptions<RicoaiDbContext> options)
             : base(options)
         {
         }
 
-        public DbSet<ricoai.Models.UserImage> UserImage { get; set; }
+        public DbSet<UserImage> UserImage { get; set; }
+
+        //public async Task<int> SaveChangesAsync()
+        //{
+        //    return await base.SaveChangesAsync();
+        //}
+
     }
 }
