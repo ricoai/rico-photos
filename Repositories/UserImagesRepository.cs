@@ -37,39 +37,6 @@ namespace ricoai.Repositories
         }
 
         /// <summary>
-        /// Determine if the given user image with the ID exist.
-        /// </summary>
-        /// <param name="id">User Image ID.</param>
-        /// <returns>TRUE if the file exist.</returns>
-        public bool UserImageExist(int id)
-        {
-            return _dbContext.UserImage.Any(e => e.id == id);
-        }
-
-        /// <summary>
-        /// Find a specific user image given the expression.
-        /// Use AsNoTracking because nothing will be done data after given.
-        /// </summary>
-        /// <param name="expression">User the expression to filter the user images.</param>
-        /// <returns>List of user images based on the query.</returns>
-        public IQueryable<UserImage> Find(Expression<Func<UserImage, bool>> expression)
-        {
-            return this._dbContext.UserImage.AsNoTracking().Where(expression);
-        }
-
-        /// <summary>
-        /// Get all the User images.
-        /// Use AsNoTracking because nothing will be done data after given.
-        /// </summary>
-        /// <returns>List of all the user images.</returns>
-        public IQueryable<UserImage> Get()
-        {
-            // Return with no tracking
-            // This return will not have the data modified here
-            return this._dbContext.UserImage.AsNoTracking();
-        }
-
-        /// <summary>
         /// Get all the user images based on the given userID.
         /// Use AsNoTracking because nothing will be done data after given.
         /// </summary>
@@ -85,9 +52,9 @@ namespace ricoai.Repositories
         /// Use AsNoTracking because nothing will be done data after given.
         /// </summary>
         /// <returns>List of the last 10 public images.</returns>
-        public Task<List<UserImage>> GetLastTenPublic()
+        public async Task<List<UserImage>> GetLastTenPublicAsync()
         {
-            return _dbContext.UserImage.AsNoTracking().Where(ui => ui.IsPublic == true).Take(10).ToListAsync();
+            return await _dbContext.UserImage.AsNoTracking().Where(ui => ui.IsPublic == true).Take(10).ToListAsync();
         }
 
         /// <summary>

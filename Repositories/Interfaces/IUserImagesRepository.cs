@@ -9,12 +9,6 @@ namespace ricoai.Repositories.Interfaces
 {
     public interface IUserImagesRepository : IDisposable
     {
-        /// <summary>
-        /// Determine if the user image exist based on the ID.
-        /// </summary>
-        /// <param name="id">ID value.</param>
-        /// <returns>TRUE if the user image exist.</returns>
-        bool UserImageExist(int id);
 
         /// <summary>
         /// Get entity for specific id asynchronously
@@ -22,12 +16,6 @@ namespace ricoai.Repositories.Interfaces
         /// <param name="id">String value of id GUID</param>
         /// <returns></returns>
         Task<UserImage> GetByIdAsync(int id);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        IQueryable<UserImage> Get();
 
         /// <summary>
         /// Get all the images for the given user ID.
@@ -40,29 +28,23 @@ namespace ricoai.Repositories.Interfaces
         /// Get the last 10 public images available.
         /// </summary>
         /// <returns>List of the last 10 public images.</returns>
-        Task<List<UserImage>> GetLastTenPublic();
+        Task<List<UserImage>> GetLastTenPublicAsync();
 
         /// <summary>
-        /// 
+        /// Insert the given UserImage.
         /// </summary>
-        /// <param name="expression"></param>
-        /// <returns></returns>
-        IQueryable<UserImage> Find(Expression<Func<UserImage, bool>> expression);
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="item"></param>
-        /// <returns></returns>
+        /// <param name="item">User image to insert.</param>
+        /// <returns>New ID for the UserImage.</returns>
         Task<int> InsertAsync(UserImage item);
 
 
         /// <summary>
-        /// 
+        /// Remove the entry with the given id.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">ID to remove.</param>
+        /// <returns>True if item was found and removed.</returns>
         Task<bool> Remove(int id);
 
-        void Dispose();
+    
     }
 }

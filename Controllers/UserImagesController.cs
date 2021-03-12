@@ -17,18 +17,22 @@ namespace ricoai
     [ApiController]
     public class UserImagesController : ControllerBase
     {
-        /// <summary>
-        /// Database connection
-        /// </summary>
-        //private readonly RicoaiDbContext _context;
 
         /// <summary>
         /// Configuration to get the AWS settings.
         /// </summary>
         private readonly IConfiguration _configuration;
 
+        // User Image access through repository
         private readonly IUserImagesRepository _userImageRepository;
 
+        /// <summary>
+        /// Get the UserImage Repository and configuration.
+        /// The configuration is needed for AWS connection.
+        /// TODO: Change from a repository to Service to move the logic of the AWS from the controller.
+        /// </summary>
+        /// <param name="userImageRepo">User Image Repository.</param>
+        /// <param name="configuration">Configuration.</param>
         public UserImagesController(IUserImagesRepository userImageRepo, IConfiguration configuration)
         {
             //_context = context;
@@ -60,7 +64,7 @@ namespace ricoai
         {
             // Return last 10 image.
             //return await _context.UserImage.Take(10).ToListAsync<UserImage>();
-            return await _userImageRepository.GetLastTenPublic();
+            return await _userImageRepository.GetLastTenPublicAsync();
         }
 
         // GET: api/UserImages/5
@@ -168,15 +172,14 @@ namespace ricoai
 
                         string jsonAiText = await amazon.DetectText(userId + @"/" + randomFileName, _configuration["aws-cred:photo-bucket"]);
 
-                        // Add the DB entry for the new image
-                        //var usrImage = amazon.CreateUserImage(userId, file.FileName, randomFileName, thumbImageName, userId, file.ContentType.ToLower();
-
+                        // Get the Meta data from the image
                         string metaJson = await ImagePropsUtil.GetProperties(file);
 
+                        // Generate the AWS S3 paths
                         string s3Path = string.Format("http://{0}.s3.amazonaws.com/{1}/{2}", _configuration["aws-cred:photo-bucket"], userId, randomFileName);
                         string s3ThumbPath = string.Format("http://{0}.s3.amazonaws.com/{1}/{2}", _configuration["aws-cred:photo-bucket"], userId, thumbImageName);
 
-                        // Pass the information to the database
+                        // Create the UserImage object
                         UserImage usrImage = new UserImage();
                         usrImage.UserId = userId;
                         usrImage.ImageName = randomFileName;
@@ -197,9 +200,7 @@ namespace ricoai
                         usrImage.FileSizeBytes = imgDim.SizeBytes;
                         usrImage.FileSizeStr = imgDim.SizeStr;
 
-
-                        //_context.UserImage.Add(usrImage);
-                        //await _context.SaveChangesAsync();
+                        // Pass the information to the database
                         await _userImageRepository.InsertAsync(usrImage);
 
                         return CreatedAtAction("GetUserImage", new { id = usrImage.id }, usrImage);
@@ -225,16 +226,6 @@ namespace ricoai
             }
 
             return NoContent();
-        }
-
-        /// <summary>
-        /// Determine if the user Image exist. 
-        /// </summary>
-        /// <param name="id">ID to check.</param>
-        /// <returns>TRUE if the image exist.</returns>
-        private bool UserImageExists(int id)
-        {
-            return _userImageRepository.UserImageExist(id);
         }
     }
 }
